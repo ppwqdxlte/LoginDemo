@@ -23,9 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.laowang.logindemo.R;
+import com.laowang.logindemo.databinding.ActivityLoginBinding;
 import com.laowang.logindemo.ui.login.LoginViewModel;
 import com.laowang.logindemo.ui.login.LoginViewModelFactory;
-import com.laowang.logindemo.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
 
