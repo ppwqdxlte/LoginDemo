@@ -12,29 +12,38 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.Response;
+
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
 
     private RestfulApiHandler restfulApiHandler = new RestfulApiHandler();
+    private String apiBase = "http://218.17.142.129:9000/token-browser-backend-0.0.1-SNAPSHOT";
+    private String api = "/login";
 
     public Result<LoggedInUser> login(String username, String password) {
 
         try {
             // TODO: handle loggedInUser authentication
+            String strUrl = apiBase + api;
+            Map<String,String> params = new HashMap<>();
+            params.put("username",username);
+            params.put("password",password);
+            Result<Response>[] result = restfulApiHandler.postSync(null, strUrl, params);
+            System.out.println("HelloWorld--------------------------------------------------------"+result[0]);
+            /*
+            OK,可以测通并返回数据
             restfulApiHandler.getAsync(null,"https://www.httpbin.org/get?a=1&b=2");
             restfulApiHandler.getSync(null,"https://www.httpbin.org/get?a=1&b=2");
             Map<String,String> params = new HashMap<>();
             params.put("a","b");
             params.put("0001","123");
             restfulApiHandler.postAsync(null,"https://www.httpbin.org/post",params);
-            restfulApiHandler.postSync(null,"https://www.httpbin.org/post",params);
+            restfulApiHandler.postSync(null,"https://www.httpbin.org/post",params);*/
             /*
             咱也不知道为啥连不上
-            String apiBase = "http://218.17.142.129:9000/token-browser-backend-0.0.1-SNAPSHOT";
-            String api = "/login";
-            String strUrl = apiBase + api;
             Log.i("url",strUrl);
             HttpURLConnection conn = restfulApiHandler.getHttpUrlConnection(strUrl);
             conn.setRequestProperty("username",username);
@@ -53,6 +62,7 @@ public class LoginDataSource {
                             "Jane Doe");
             return new Result.Success<>(fakeUser);
         } catch (Exception e) {
+            e.printStackTrace();
             return new Result.Error(new IOException("Error logging in", e));
         }
     }
