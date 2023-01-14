@@ -28,7 +28,9 @@ import com.laowang.logindemo.ui.login.LoginViewModel;
 import com.laowang.logindemo.ui.login.LoginViewModelFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
+    /*
+     * jetpack护法ViewModel
+    * */
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
 

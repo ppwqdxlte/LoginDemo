@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <!--
+    根据当前版本，Android不会征求与互联网交互的权限，但是您可以添加以下代码，这将对使用旧版本的用户有所帮助，
+    只需在AndroidManifest中添加这些代码即可-->
+    <!-- 由于APP要访问网络上的api接口，所以必须开通网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

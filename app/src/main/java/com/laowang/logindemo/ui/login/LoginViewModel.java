@@ -12,9 +12,11 @@ import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.R;
 
 public class LoginViewModel extends ViewModel {
-
+    /*登录状态*/
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    /*登录结果*/
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
+    /**/
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -65,6 +67,6 @@ public class LoginViewModel extends ViewModel {
 
     // A placeholder password validation check
     private boolean isPasswordValid(String password) {
-        return password != null && password.trim().length() > 5;
+        return password != null && password.trim().length() > 1;
     }
 }
