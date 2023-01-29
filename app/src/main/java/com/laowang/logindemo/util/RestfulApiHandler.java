@@ -21,6 +21,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * 自己写的REST接口通用访问工具：
+ * 同步GET，异步GET，同步POST，异步POST
+ */
 public class RestfulApiHandler {
 
     private OkHttpClient okHttpClient = new OkHttpClient();
