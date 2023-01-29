@@ -2,6 +2,7 @@ package com.laowang.logindemo.data;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.databinding.ActivityLoginBinding;
 import com.laowang.logindemo.ui.login.LoginViewModel;
@@ -49,12 +50,20 @@ public class LoginDataSource {
             params.put("password",password);
             Result<Response>[] result = restfulApiHandler.postSync(null, strUrl, params);
             System.out.println("HelloWorld--------------------------------------------------------"+result[0]);
-            // TODO: 假用户，登录成功需要返回真实用户
-            LoggedInUser fakeUser =
-                    new LoggedInUser(
-                            java.util.UUID.randomUUID().toString(),
-                            "Jane Doe");
-            return new Result.Success<>(fakeUser);
+            /*等待结果不为空*/
+            while (result[0] == null){}
+            if (result[0] instanceof Result.Success){
+                // TODO: 假用户，登录成功需要返回真实用户
+                LoggedInUser fakeUser =
+                        new LoggedInUser(
+                                java.util.UUID.randomUUID().toString(),
+                                "Jane Doe");
+                Response res = ((Result.Success<Response>) result[0]).getData();
+                String jsonStr = res.body().string();
+                // TODO json字符串转换成对象
+                return new Result.Success<>(fakeUser);
+            }
+            throw new Exception("压根儿访问不到");
         } catch (Exception e) {
             e.printStackTrace();
             return new Result.Error(new IOException("Error logging in", e));
