@@ -43,7 +43,7 @@ public class LoginRepository {
     }
 
     /**
-     * 登出，移除user对象，数据源关闭连接
+     * 登出，移除user对象(√)，数据源关闭连接
      */
     public void logout() {
         user = null;
