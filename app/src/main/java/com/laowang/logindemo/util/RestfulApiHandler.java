@@ -49,7 +49,7 @@ public class RestfulApiHandler {
             Response response = null;
             try {
                 response = call.execute();
-                Log.e("get同步请求:", "getSync:" + response.body().string());
+//                Log.e("get同步请求:", "getSync:" + response.body().string());
                 result[0] = new Result.Success<>(response);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -83,7 +83,7 @@ public class RestfulApiHandler {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 //响应码可能是404也可能是200都会走这个方法
                 if (response.isSuccessful()) {
-                    Log.e("get异步请求:", "getAsync:" + response.body().string());
+//                    Log.e("get异步请求:", "getAsync:" + response.body().string());
                     result[0] = new Result.Success<>(response);
                 } else {
                     Log.e("有问题的get异步请求", "code: " + response.code() + " ,message: " + response.message());
@@ -118,7 +118,7 @@ public class RestfulApiHandler {
             Call call = okHttpClient.newCall(request);
             try {
                 Response response = call.execute();
-                Log.e("post同步请求", "postSync:" + response.body().string());
+//                Log.e("post同步请求", "postSync:" + response.body().string());
                 result[0] = new Result.Success<>(response);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -153,7 +153,7 @@ public class RestfulApiHandler {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    Log.e("post异步请求", "postAsync:" + response.body().string());
+//                    Log.e("post异步请求", "postAsync:" + response.body().string());
                     result[0] = new Result.Success<>(response);
                 } else {
                     Log.e("有问题的post异步请求", " code: " + response.code());
