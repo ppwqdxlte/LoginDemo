@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.laowang.logindemo.R;
 import com.laowang.logindemo.databinding.ActivityLoginBinding;
+import com.laowang.logindemo.databinding.ActivityMainBinding;
 import com.laowang.logindemo.ui.login.LoginViewModel;
 import com.laowang.logindemo.ui.login.LoginViewModelFactory;
 
@@ -33,6 +34,10 @@ public class LoginActivity extends AppCompatActivity {
     * */
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    /**
+     * 主页
+     */
+    private ActivityMainBinding mainBinding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +135,9 @@ public class LoginActivity extends AppCompatActivity {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        // TODO : redirect to activity-main
+//        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(mainBinding.getRoot());
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {
