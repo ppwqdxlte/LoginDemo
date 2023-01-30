@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.laowang.logindemo.databinding.FragmentHomeBinding;
+import com.laowang.logindemo.util.ResourceProvider;
 
 public class HomeFragment extends Fragment {
 
@@ -18,6 +19,9 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // 初始化 ResourceProvider 的上下文，注意，必须要在homeViewModel构造方法之前执行
+        ResourceProvider.setmCtx(getContext());
+        // 初始化 HomeViewModel对象
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 

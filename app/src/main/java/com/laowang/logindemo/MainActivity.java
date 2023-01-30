@@ -14,6 +14,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.laowang.logindemo.databinding.ActivityMainBinding;
+import com.laowang.logindemo.util.ResourceProvider;
 
 public class MainActivity extends AppCompatActivity {
 
