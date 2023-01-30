@@ -36,21 +36,21 @@ public class LoginViewModel extends ViewModel {
     LiveData<LoginResult> getLoginResult() {
         return loginResult;
     }
-
     /**
-     *
+     * 登录，很显然【包装模式】方法层层调用层层加码，这层的登录方法作用主要 显示登录结果
      * @param username username
      * @param password password
      */
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
         Result<LoggedInUser> result = loginRepository.login(username, password);
-
+        // 设置登录结果消息提示
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
             loginResult.setValue(new LoginResult(new LoggedInUserView(data.getDisplayName())));
         } else {
-            loginResult.setValue(new LoginResult(R.string.login_failed));
+            // 用户不存在提示
+            loginResult.setValue(new LoginResult(R.string.user_not_exists));
         }
     }
 

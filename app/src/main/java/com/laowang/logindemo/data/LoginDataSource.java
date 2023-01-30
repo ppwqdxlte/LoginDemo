@@ -59,20 +59,24 @@ public class LoginDataSource {
             Result<Response>[] result = restfulApiHandler.postSync(null, strUrl, params);
             // 直到result[0]不为空退出循环执行后面方法
             while (result[0] == null){}
-            Log.i("返回结果","HelloWorld--------------------------------------------------------"+result[0]);
             if (result[0] instanceof Result.Success){
                 Result.Success<Response> success = (Result.Success<Response>)result[0];
                 Response response = success.getData();
-                //注意，response.body().string()用一次就关闭！！所以用一个变量保存好！
+                // 注意，response.body().string()用一次就关闭！！所以用一个变量保存好！
                 String string = response.body().string();
+                // eg.用户或密码错误时候，{"data":null,"msg":null,"code":null,"throwable":null}
                 Log.e("body to string",string);
                 com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(string, com.laowang.logindemo.apientity.Result.class);
+                // 需注意 空指针异常
+                if (fromJson.getData() == null){
+                    return new Result.Error("Error username or password~",new Exception("No such an account exists!"));
+                }
                 Log.i("Gson's Data toString",fromJson.getData().toString());
                 LinkedTreeMap data = (LinkedTreeMap) fromJson.getData();
                 return new Result.Success<>(new LoggedInUser(java.util.UUID.randomUUID().toString(),data.get("username").toString())
                         ,"Successfully logged in!!!");
             } else {
-                throw new Exception("压根儿访问不到");
+                throw new Exception("访问API失败！");
             }
         } catch (Exception e) {
             e.printStackTrace();
