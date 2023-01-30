@@ -5,22 +5,27 @@ import com.laowang.logindemo.data.model.LoggedInUser;
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
+ * 该类：从远程数据源请求身份验证和用户信息，并维护登录状态和用户凭据信息的内存缓存。
  */
 public class LoginRepository {
-
+    /**
+     * 静态成员实例，线程可见
+     */
     private static volatile LoginRepository instance;
-
+    /**
+     * 数据源
+     */
     private LoginDataSource dataSource;
-
-    // If user credentials will be cached in local storage, it is recommended it be encrypted
-    // @see https://developer.android.com/training/articles/keystore
+    /** 保存当前登录的用户信息
+     * If user credentials will be cached in local storage, it is recommended it be encrypted
+     */
     private LoggedInUser user = null;
-
-    // private constructor : singleton access
+    /** private constructor : singleton access 单粒模式
+     * @param dataSource 数据源
+     */
     private LoginRepository(LoginDataSource dataSource) {
         this.dataSource = dataSource;
     }
-
     /**
      * 单粒意味着 dataSource数据源一经确定就无法改变，且整个应用只有一个LoginRepository对象
      * 【疑问】不合理之处在于APP需要支持并发登录，可能多人同时在线，旧代码一个repository“仓库”只有一个user,之后的更新中需要升级成users集合，第二种方法：取消LoginRepository的单粒模式，一个repository干脆对应一个user
@@ -34,14 +39,12 @@ public class LoginRepository {
         }
         return instance;
     }
-
     /**
      * @return 是否登录
      */
     public boolean isLoggedIn() {
         return user != null;
     }
-
     /**
      * 登出，移除user对象(√)，数据源关闭连接
      */
@@ -49,7 +52,6 @@ public class LoginRepository {
         user = null;
         dataSource.logout();
     }
-
     /** 设置登录对象
      * @param user 成功登录的用户
      */
@@ -58,7 +60,6 @@ public class LoginRepository {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
     }
-
     /** 登录,调用dataSource数据源的login方法，如果成功则设置当前登录用户
      * @param username username
      * @param password password

@@ -13,26 +13,30 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/hello_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginDemo.NoActionBar"
         tools:targetApi="31"
         android:usesCleartextTraffic="true"><!-- true-允许明文通信，可能泄漏隐私数据风险，false-默认禁止明文通信 -->
-        <!-- 此处设置app启动首页 -->
+        <!-- 此处设置app启动页【登录页】 -->
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!-- 目前还用不上 -->
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+        </activity>
+        <!-- app主页 main activity -->
+        <activity android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
         </activity>
     </application>
 

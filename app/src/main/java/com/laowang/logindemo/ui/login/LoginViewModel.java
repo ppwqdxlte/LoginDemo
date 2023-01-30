@@ -18,11 +18,11 @@ import com.laowang.logindemo.R;
  *  LoginResult?     /ui/login/..
  */
 public class LoginViewModel extends ViewModel {
-    /*登录状态*/
+    /** 可变LiveData: 表单状态(是否合法) */
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
-    /*登录结果*/
+    /** 可变LiveData: 结果 */
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    /*LoginRepository成员变量*/
+    /** 仓库：维护登录状态和用户凭据信息的内存缓存 */
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {

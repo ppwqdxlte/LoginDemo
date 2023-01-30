@@ -43,14 +43,12 @@ public class LoginDataSource {
      * API后缀
      */
     private String api = "/login";
-
     /** 登录方法的源头
      * @param username username
      * @param password password
      * @return Result对象 /data/.. 携带登录用户结果
      */
     public Result<LoggedInUser> login(String username, String password) {
-
         try {
             // : handle loggedInUser authentication
             String strUrl = apiBase + api;
@@ -61,11 +59,6 @@ public class LoginDataSource {
             // 直到result[0]不为空退出循环执行后面方法
             while (result[0] == null) {}
             if (result[0] instanceof Result.Success) {
-                /*Result.Success<Response> success = (Result.Success<Response>) result[0];
-                Response response = success.getData();*/
-                // 注意，response.body().string()用一次就关闭！！所以用一个变量保存好！
-                // 最好还是子线程调用此方法，因为哪怕主线程使用了response，也算在主线程使用网络，还是会间歇性抽风报错，
-                // 而且，你看response对象除了提供 body string，还有嘛用途 啊，干脆重构api方法返回json string算了！
                 Result.Success<String> success = (Result.Success<String>) result[0];
                 String jsonStr = success.getData();
                 // eg.用户或密码错误时候，{"data":null,"msg":null,"code":null,"throwable":null}
@@ -89,7 +82,6 @@ public class LoginDataSource {
             return new Result.Error(new IOException("Error logging in", e));
         }
     }
-
     /**
      * 登出，调用此法的上游方法已经移除登录user，这里只要跳转到Login页面即可
      */

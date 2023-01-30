@@ -5,6 +5,9 @@ package com.laowang.logindemo.ui.login;
  * 回显 用户名词，vo
  */
 class LoggedInUserView {
+    /**
+     * 展示的用户名词
+     */
     private String displayName;
     //... other data fields that may be accessible to the UI
 
