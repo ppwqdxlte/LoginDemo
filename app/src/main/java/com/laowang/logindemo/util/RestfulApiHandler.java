@@ -21,14 +21,19 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * 自己写的REST接口通用访问工具：
+ * 同步GET，异步GET，同步POST，异步POST
+ */
 public class RestfulApiHandler {
 
     private OkHttpClient okHttpClient = new OkHttpClient();
-
     /**
      * GET同步请求【注意网络同步请求原则上要有一个子线程，
      * 【反转】操他腚的，我说怎么得不到数据，我主线程都跑完了，子线程还没跑完操你腚的那还开个JB的新线程，同步阻塞算了！
      * 【再反转】安卓规定不能在主线程里面直接搞同步网络请求，必须开子线程才行，你头铁的话就报错：W/System.err: android.os.NetworkOnMainThreadException】
+     * GET同步请求【注意网络同步请求原则上要有一个子线程，【反转】操他腚的，我说怎么得不到数据，我主线程都跑完了，子线程还没跑完操你腚的
+     * 那还开个JB的新线程，同步阻塞算了！】
      * @param view 继承View的实现类对象
      * @param url  get方法URL后边可以跟着参数 比如：“https://www.httpbin.org/get?a=1&b=2”
      *             https://www.httpbin.org/get为开源测试网址
@@ -38,7 +43,7 @@ public class RestfulApiHandler {
      */
     public Result<Response>[] getSync(View view, String url) {
         final Result<Response>[] result = new Result[]{null};
-        new Thread(()->{
+        new Thread(() -> {
             Request request = new Request.Builder().url(url).build();
             //请求的call对象
             Call call = okHttpClient.newCall(request);
@@ -54,13 +59,12 @@ public class RestfulApiHandler {
         }).start();
         return result;
     }
-
     /**
      * GET异步请求【异步不需要创建线程】
      * @param view 继承View的实现类对象
-     * @param url eg. "https://www.httpbin.org/get?a=1&b=2"
+     * @param url  eg. "https://www.httpbin.org/get?a=1&b=2"
      */
-    public Result<Response>[] getAsync(View view,String url) {
+    public Result<Response>[] getAsync(View view, String url) {
         final Result<Response>[] result = new Result[]{null};
         Request request = new Request.Builder().url(url).build();
         //请求的call对象
@@ -87,21 +91,20 @@ public class RestfulApiHandler {
         });
         return result;
     }
-
     /**
      * okp默认是get请求,post需要有请求体，即formBody
-     * @param view 继承View的实现类对象
-     * @param url  eg. "https://www.httpbin.org/post"
+     * @param view   继承View的实现类对象
+     * @param url    eg. "https://www.httpbin.org/post"
      * @param params Map<String,String> 字符串参数map
      * @return Result<Response>[] single-element result
      */
-    public Result<Response>[] postSync(View view, String url, Map<String,String> params) {
+    public Result<Response>[] postSync(View view, String url, Map<String, String> params) {
         final Result<Response>[] result = new Result[]{null};
-        new Thread(()->{
+        new Thread(() -> {
             // FormBody是RequestBody的子类
             FormBody.Builder builder = new FormBody.Builder();
             for (String s : params.keySet()) {
-                builder.add(s,params.get(s));
+                builder.add(s, params.get(s));
             }
             FormBody formBody = builder.build();
             Request request = new Request.Builder().url(url)
@@ -120,17 +123,16 @@ public class RestfulApiHandler {
         }).start();
         return result;
     }
-
     /**
-     * @param view sub-class object
-     * @param url eg. "https://www.httpbin.org/post"
+     * @param view   sub-class object
+     * @param url    eg. "https://www.httpbin.org/post"
      * @param params Map<String,String> request parameters
      */
-    public Result<Response>[] postAsync(View view,String url, Map<String,String> params) {
-        final Result<Response>[] result= new Result[]{null};
+    public Result<Response>[] postAsync(View view, String url, Map<String, String> params) {
+        final Result<Response>[] result = new Result[]{null};
         FormBody.Builder builder = new FormBody.Builder();
         for (String s : params.keySet()) {
-            builder.add(s,params.get(s));
+            builder.add(s, params.get(s));
         }
         FormBody formBody = builder.build();
         Request request = new Request.Builder().url(url)

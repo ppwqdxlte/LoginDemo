@@ -11,12 +11,18 @@ import com.laowang.logindemo.data.Result;
 import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.R;
 
+/**
+ * ViewModel 包含:
+ *  LoginRepository? /data/model/.. 构造时候初始化，设置loginRepository，没有getter
+ *  LoginFormState?  /ui/login/..
+ *  LoginResult?     /ui/login/..
+ */
 public class LoginViewModel extends ViewModel {
     /*登录状态*/
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     /*登录结果*/
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
-    /**/
+    /*LoginRepository成员变量*/
     private LoginRepository loginRepository;
 
     LoginViewModel(LoginRepository loginRepository) {
@@ -31,6 +37,11 @@ public class LoginViewModel extends ViewModel {
         return loginResult;
     }
 
+    /**
+     *
+     * @param username username
+     * @param password password
+     */
     public void login(String username, String password) {
         // can be launched in a separate asynchronous job
         Result<LoggedInUser> result = loginRepository.login(username, password);
