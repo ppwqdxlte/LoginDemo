@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.laowang.logindemo.MainActivity;
 import com.laowang.logindemo.R;
 import com.laowang.logindemo.databinding.ActivityLoginBinding;
 import com.laowang.logindemo.databinding.ActivityMainBinding;
@@ -135,8 +136,8 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-        // TODO : redirect to activity-main
+        Toast.makeText(getApplicationContext(), welcome,Toast.LENGTH_LONG).show();
+        // redirect to activity-main TODO 我觉得应该在 finish()后面弹出主窗口或者在这里弹出来。。
 //        mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
 //        setContentView(mainBinding.getRoot());
     }
