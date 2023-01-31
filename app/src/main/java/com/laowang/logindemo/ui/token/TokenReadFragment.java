@@ -1,4 +1,4 @@
-package com.laowang.logindemo.ui.slideshow;
+package com.laowang.logindemo.ui.token;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.laowang.logindemo.databinding.FragmentSlideshowBinding;
+import com.laowang.logindemo.databinding.FragmentTokenreadBinding;
 
-public class SlideshowFragment extends Fragment {
+public class TokenReadFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentTokenreadBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        TokenReadViewModel slideshowViewModel =
+                new ViewModelProvider(this).get(TokenReadViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentTokenreadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textSlideshow;

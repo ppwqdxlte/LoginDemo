@@ -15,11 +15,11 @@
         android:id="@+id/nav_gallery"
         android:name="com.laowang.logindemo.ui.management.ManagementFragment"
         android:label="@string/menu_management"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_management" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.laowang.logindemo.ui.slideshow.SlideshowFragment"
+        android:name="com.laowang.logindemo.ui.token.TokenReadFragment"
         android:label="@string/menu_token_reading"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_tokenread" />
 </navigation>
