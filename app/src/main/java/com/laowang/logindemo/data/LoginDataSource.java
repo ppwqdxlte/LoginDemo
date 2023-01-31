@@ -70,13 +70,13 @@ public class LoginDataSource {
                 Result.Success<String> success = (Result.Success<String>) result[0];
                 String jsonStr = success.getData();
                 // eg.用户或密码错误时候，{"data":null,"msg":null,"code":null,"throwable":null}
-                Log.e("body to string", jsonStr);
+//                Log.e("body to string", jsonStr);
                 com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(jsonStr, com.laowang.logindemo.apientity.Result.class);
                 // 需注意 空指针异常
                 if (fromJson.getData() == null) {
                     return new Result.Error("Error username or password~", new Exception("No such an account exists!"));
                 }
-                Log.i("Gson's Data toString", fromJson.getData().toString());
+//                Log.i("Gson's Data toString", fromJson.getData().toString());
                 LinkedTreeMap data = (LinkedTreeMap) fromJson.getData();
                 return new Result.Success<>(new LoggedInUser(java.util.UUID.randomUUID().toString(), data.get("username").toString()), null);
             } else {

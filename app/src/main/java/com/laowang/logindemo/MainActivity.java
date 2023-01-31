@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d("总会执行的方法体", "返回值确定是否显示出来，但准备工作是已经做完了的");
+//        Log.d("总会执行的方法体", "返回值确定是否显示出来，但准备工作是已经做完了的");
         // Inflate the menu; this adds items to the action bar if it is present.
         /* main指的是右上角的下拉菜单(OptionsMenu)。。。。有log out的那个
          * 我确定 这个 下拉菜单没有在 其它XML标签中被显示引用，但是在下方源码才引入了R.memu.main，如果说 menu是框架默认自带的，
@@ -93,7 +93,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * 监听菜单项的选中事件，单击即注销user 退出 main进入login页面,LoginRepository该类的 logout（）方法已经做完这三件事了，只需要调用即可
+     * 监听菜单项的选中事件，而菜单项可不仅仅是 右上角的呦！还包括左上角的抽屉菜单！！！所以这个监听器能做很多事情！无比区分不同的菜单项！！
+     * 1.单击Log out菜单项即注销user 退出 main进入login页面,LoginRepository该类的 logout（）方法已经做完这三件事了，只需要调用即可
      * @param item 选中菜单项
      * @return 是否显示变化
      */
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("selected item id", item.getItemId() + ""); // 2131231224
 //        Log.i("item order", item.getOrder() + "");        //100
 //        Log.i("item title", item.getTitle().toString());  // Log out
-        if (item.getTitle().toString().equals(ResourceProvider.getString(R.string.log_out))) { // 先判断选中项是否为Log out
+        if (item.getTitle() != null && item.getTitle().toString().equals(ResourceProvider.getString(R.string.log_out))) { // 先判断选中项是否为Log out
             LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
             loginRepository.logout(MainActivity.this, LoginActivity.class);
         }
