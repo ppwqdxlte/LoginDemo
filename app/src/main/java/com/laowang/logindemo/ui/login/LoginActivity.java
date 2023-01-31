@@ -117,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                 //  IME(Input Method Editor): 输入法编辑器。通常简作输入法
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     // 从界面中获取username,password传参，WHAT？为啥在这里有登录？
-                    Log.d("输入法界面点了enter回车","除了手动点击按钮空间，点击输入法的回车一样会登录");
+//                    Log.d("输入法界面点了enter回车","除了手动点击按钮空间，点击输入法的回车一样会登录");
                     loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
                 }
                 // 返回false表示点击后,隐藏软键盘。返回true表示保留软键盘

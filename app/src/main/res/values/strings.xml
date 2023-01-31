@@ -14,13 +14,13 @@
     <!-- nav interfaces -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">Token Browser</string>
+    <string name="nav_header_subtitle">SHENZHEN CALINMETER CO,.LTD</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="log_out">Log out</string>
     <!-- nav items and appBar text -->
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Management</string>
-    <string name="menu_slideshow">TokenReading</string>
+    <string name="menu_management">Management</string>
+    <string name="menu_token_reading">TokenReading</string>
     <string name="default_home_text">The main function of this software is to simply manage token.\n1.Login account is divided into main account and ordinary account (account authority is fixed).\n2.You can import and save all kinds of token,The specific operation is in the \'Excel Import\' interface.\n3.You can view the imported token according to the conditions,The specific ration is in the \'Query\' interface.</string>
 </resources>
