@@ -56,6 +56,10 @@ public class LoginRepository {
         return user != null;
     }
 
+    public LoggedInUser getUser() {
+        return user;
+    }
+
     /**
      * 登出，移除user对象(√)，数据源关闭连接
      */

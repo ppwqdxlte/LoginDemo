@@ -114,8 +114,11 @@ public class RestfulApiHandler {
         new Thread(() -> {
             // FormBody是RequestBody的子类
             FormBody.Builder builder = new FormBody.Builder();
-            for (String s : params.keySet()) {
-                builder.add(s, params.get(s));
+            // 注意params要做非空判断
+            if (params != null) {
+                for (String s : params.keySet()) {
+                    builder.add(s, params.get(s));
+                }
             }
             FormBody formBody = builder.build();
             Request request = new Request.Builder().url(url)

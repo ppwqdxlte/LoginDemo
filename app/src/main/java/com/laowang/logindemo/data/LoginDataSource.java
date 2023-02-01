@@ -1,35 +1,19 @@
 package com.laowang.logindemo.data;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.NetworkOnMainThreadException;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.laowang.logindemo.apientity.TokenUser;
 import com.laowang.logindemo.data.model.LoggedInUser;
-import com.laowang.logindemo.databinding.ActivityLoginBinding;
 import com.laowang.logindemo.ui.login.LoginActivity;
-import com.laowang.logindemo.ui.login.LoginViewModel;
-import com.laowang.logindemo.ui.login.LoginViewModelFactory;
 import com.laowang.logindemo.util.RestfulApiHandler;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.invoke.MethodType;
-import java.net.HttpURLConnection;
-import java.nio.CharBuffer;
-import java.sql.DriverManager;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okhttp3.internal.http.RealResponseBody;
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -40,15 +24,6 @@ public class LoginDataSource {
      */
     private RestfulApiHandler restfulApiHandler = new RestfulApiHandler();
     /**
-     * 数据源的 根URL
-     */
-    private String apiBase = "http://218.17.142.129:9000/token-browser-backend-0.0.1-SNAPSHOT";
-    /**
-     * API后缀
-     */
-    private String api = "/login";
-
-    /**
      * 登录方法的源头
      *
      * @param username username
@@ -58,7 +33,7 @@ public class LoginDataSource {
     public Result<LoggedInUser> login(String username, String password) {
         try {
             // : handle loggedInUser authentication
-            String strUrl = apiBase + api;
+            String strUrl = ApiUrl.API_BASE + ApiUrl.API_LOGIN;
             Map<String, String> params = new HashMap<>();
             params.put("username", username);
             params.put("password", password);
@@ -78,7 +53,12 @@ public class LoginDataSource {
                 }
 //                Log.i("Gson's Data toString", fromJson.getData().toString());
                 LinkedTreeMap data = (LinkedTreeMap) fromJson.getData();
-                return new Result.Success<>(new LoggedInUser(java.util.UUID.randomUUID().toString(), data.get("username").toString()), null);
+                return new Result.Success<>(new LoggedInUser(
+                        java.util.UUID.randomUUID().toString(),
+                        data.get("username").toString(),
+                        data.get("password").toString(),
+                        data.get("level").toString(),
+                        data.get("date").toString()), null);
             } else {
                 throw new Exception("访问API失败！");
             }

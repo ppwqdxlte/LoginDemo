@@ -1,8 +1,6 @@
 package com.laowang.logindemo.ui.management;
 
-import android.content.res.loader.ResourcesProvider;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +13,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.laowang.logindemo.R;
+import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.databinding.FragmentManagementBinding;
 import com.laowang.logindemo.util.ResourceProvider;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Map;
 
 public class ManagementFragment extends Fragment {
 //    private static AtomicInteger count = new AtomicInteger(0);
@@ -37,20 +34,21 @@ public class ManagementFragment extends Fragment {
         /* 充气 */
         binding = FragmentManagementBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        /* 选项页的文字视图，TODO 设置ViewModel的userList
-                     TODO 2.按权限显示页面底部操作tab页签 点什么就打开对应的fragment */
+        /* 页面部件的双向绑定 */
         final TextView textView = binding.textManagement;
         final TableLayout userList = binding.userList;
+        /* 进入fragment更新用户列表 */
+        viewModel.updateUserList(getContext());
         /* 视图模型 有数据的话 就会填充进 文本视图XML里！ */
         viewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        viewModel.getTableRows().observe(getViewLifecycleOwner(), new Observer<List<TableRow>>() {
+        viewModel.getTableRows().observe(getViewLifecycleOwner(), new Observer<Map<String,TableRow>>() {
             @Override
-            public void onChanged(List<TableRow> tableRows) {
+            public void onChanged(Map<String,TableRow> tableRows) {
                 // 保留表头
                 if (userList.getChildCount()>1){ //不确定是否直接子view就是TableRow...
                     userList.removeViews(1,userList.getChildCount() - 1);//不确定是否从0开始
                 }
-                for (TableRow tableRow : tableRows) {
+                for (TableRow tableRow : tableRows.values()) {
                     userList.addView(tableRow);
                 }
             }
@@ -62,5 +60,17 @@ public class ManagementFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    private void addUser(LoggedInUser newUser){
+        // TODO 添加用户
+    }
+
+    private void modifyPwd(LoggedInUser user){
+        // TODO 修改密码
+    }
+
+    private void deleteUser(LoggedInUser user){
+        // TODO 删除用户
     }
 }
