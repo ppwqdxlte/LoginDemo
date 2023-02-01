@@ -17,8 +17,10 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/text_management"
@@ -32,18 +34,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <!-- 滚动容器 -->
-        <ScrollView
-            android:id="@+id/scroll_mng_1"
+        <!-- 用户列表表头-->
+        <TableLayout
+            android:id="@+id/user_list"
             android:layout_width="match_parent"
-            android:layout_height="200dp">
-            <!-- user list grid -->
-            <GridView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:numColumns="4"
-                android:outlineSpotShadowColor="@color/design_default_color_primary_variant"/>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:scrollbarFadeDuration="@integer/material_motion_duration_medium_1"
+            android:scrollbarStyle="insideOverlay">
+            <TableRow android:id="@+id/user_list_header">
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_sn"/>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_id"/>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_role"/>
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_time"/>
+            </TableRow>
+        </TableLayout>
         <!-- 分隔线 -->
         <View
             android:id="@+id/divider"
@@ -59,23 +71,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
-                <!-- TODO 因为用户权限不同，可供管理的选项卡数量就不一样，所以程序运行时决定，在此不必固定TabItem,但是可以给个默认的看看 -->
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/app_name"/>
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/app_name"/>
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/app_name"/>
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/app_name"/>
+                <!-- 因为用户权限不同，可供管理的选项卡数量就不一样，运行时决定，在此不必固定TabItem -->
             </com.google.android.material.tabs.TabLayout>
         </ScrollView>
     </LinearLayout>
