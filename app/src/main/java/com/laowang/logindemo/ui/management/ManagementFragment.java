@@ -29,7 +29,7 @@ public class ManagementFragment extends Fragment {
         View root = binding.getRoot();
         /* 选项页的文字视图，TODO 把文字替换成布局，1.按权限级别显示用户列表（序号，名称，级别，创建时间），1-全部，0-自己；
                      TODO 2.按权限显示页面底部操作tab页签 点什么就打开对应的fragment */
-        final TextView textView = binding.textGallery;
+        final TextView textView = binding.textManagement;
         // 视图模型能拿出来文字就会填充进 文本视图XML里！
         viewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
