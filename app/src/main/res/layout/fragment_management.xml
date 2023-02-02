@@ -41,20 +41,7 @@
             android:layout_height="wrap_content"
             android:scrollbarFadeDuration="@integer/material_motion_duration_medium_1"
             android:scrollbarStyle="insideOverlay">
-            <TableRow android:id="@+id/user_list_header">
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_sn"/>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_id"/>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_role"/>
-                <TextView
-                    android:layout_height="wrap_content"
-                    android:text="@string/user_time"/>
-            </TableRow>
+            <!-- 动态生成table rows -->
         </TableLayout>
         <!-- 分隔线 -->
         <View

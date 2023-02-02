@@ -90,4 +90,21 @@ public class ManagementViewModel extends ViewModel {
         userRow.addView(createdTime);
         return userRow;
     }
+
+    public TableRow addTableHeadInRow(Context context) {
+        TableRow userRow = new TableRow(context);
+        TextView sn = new TextView(context);
+        sn.setText("SN");
+        TextView username = new TextView(context);
+        username.setText("Username");
+        TextView role = new TextView(context);
+        role.setText("Role");
+        TextView createdTime = new TextView(context);
+        createdTime.setText("CreatedTime");
+        userRow.addView(sn);
+        userRow.addView(username);
+        userRow.addView(role);
+        userRow.addView(createdTime);
+        return userRow;
+    }
 }
