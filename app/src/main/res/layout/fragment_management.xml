@@ -44,22 +44,22 @@
             <!-- 动态生成table rows -->
         </TableLayout>
         <!-- 分隔线 -->
-        <View
-            android:id="@+id/divider"
+        <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:layout_height="2pt"
+            app:dividerColor="@color/ic_launcher_background" />
         <!-- 滚动容器 -->
-        <ScrollView
-            android:id="@+id/scroll_mng_2"
-            android:layout_width="match_parent"
+        <!-- 选项卡布局 -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs_management"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <!-- 选项卡布局 -->
-            <com.google.android.material.tabs.TabLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <!-- 因为用户权限不同，可供管理的选项卡数量就不一样，运行时决定，在此不必固定TabItem -->
-            </com.google.android.material.tabs.TabLayout>
-        </ScrollView>
+            <!-- 因为用户权限不同，可供管理的选项卡数量就不一样，运行时决定，在此不必固定TabItem -->
+        </com.google.android.material.tabs.TabLayout>
+        <!-- 视图寻呼机，配合TabLayout使用 -->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager_management"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

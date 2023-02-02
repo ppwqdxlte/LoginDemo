@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.ManagementDataSource;
@@ -39,7 +40,7 @@ public class ManagementViewModel extends ViewModel {
         loginRepository = new MutableLiveData<>(LoginRepository.getInstance(new LoginDataSource()));
         dataSource = new MutableLiveData<>(new ManagementDataSource());
         mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        mText.setValue("USER LIST");
         mTableRows = new MutableLiveData<>();
         mTableRows.setValue(new HashMap<>()); // 避免空指针异常
     }
