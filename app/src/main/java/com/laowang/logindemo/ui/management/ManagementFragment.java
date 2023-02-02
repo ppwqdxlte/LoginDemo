@@ -56,8 +56,11 @@ public class ManagementFragment extends Fragment {
             }
         });
 
-        /* 选项页 */
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), requireActivity().getSupportFragmentManager());
+        /* 选项页 有一个BUG，首次访问此页面选项卡片都正常，但是以后再从别的页面点回来时，选项卡片就不显示了， 应该是生命周期的问题
+        *       可以确定Fragment每次点进都会创建一次，那么就是PageViewModel问题了
+        * 【更正】也不是PageViewModel的问题，期间我尝试了很多，没想到最终解决问题的方法居然是 this.getChildFragmentManager()！！
+        * 把父fragment的 SectionsPagerAdapter 区域传呼适配器 构造传参的 父FragmentManager 改成 ChildFragmentManager!!!!! */
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), this.getChildFragmentManager());
         ViewPager viewPager = binding.viewpagerManagement;
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = binding.tabsManagement;
