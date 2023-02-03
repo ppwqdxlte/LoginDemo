@@ -29,7 +29,8 @@
     <string name="user_id">user ID</string>
     <string name="user_role">role</string>
     <string name="user_time">created time</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Create User</string>
+    <string name="tab_text_2">Modify User</string>
+    <string name="tab_text_3">Change Password</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

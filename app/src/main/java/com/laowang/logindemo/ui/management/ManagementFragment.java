@@ -55,15 +55,19 @@ public class ManagementFragment extends Fragment {
                 userList.addView(tableRow,userList.getChildCount());
             }
         });
-
         /* 选项页 有一个BUG，首次访问此页面选项卡片都正常，但是以后再从别的页面点回来时，选项卡片就不显示了， 应该是生命周期的问题
         *       可以确定Fragment每次点进都会创建一次，那么就是PageViewModel问题了
         * 【更正】也不是PageViewModel的问题，期间我尝试了很多，没想到最终解决问题的方法居然是 this.getChildFragmentManager()！！
         * 把父fragment的 SectionsPagerAdapter 区域传呼适配器 构造传参的 父FragmentManager 改成 ChildFragmentManager!!!!! */
+        /* 【后端】绑【后端】【区段寻呼机适配器】顾名思义，就是把不同段区的设备连接起来，是指可以互相转换通信，tabLayout中的适配器就是把 father View和 son Views之间建立一个信道 */
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), this.getChildFragmentManager());
+        /*　UI（XML）视图适配器 */
         ViewPager viewPager = binding.viewpagerManagement;
+        /*　【后端】绑【前端】后端适配器绑定到UI适配器　*/
         viewPager.setAdapter(sectionsPagerAdapter);
+        /*　UI选项卡布局　*/
         TabLayout tabs = binding.tabsManagement;
+        /*　【前端】绑【前端】UI视图适配器从逻辑层面绑定到UI选项卡布局。【细节】XML中TabLayout和ViewPager是分开的，结构上并不包含　*/
         tabs.setupWithViewPager(viewPager);
 
         return root;
