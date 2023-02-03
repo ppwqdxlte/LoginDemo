@@ -71,12 +71,12 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         // 按照权限修改 TAB_TITLES,准备2套！
         if (loginRepository.getUser().getLevel().contains("1")) {
-            if (TAB_TITLES == null || TAB_TITLES.length < 2) {
-                TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+            if (TAB_TITLES == null || TAB_TITLES.length < 3) {
+                TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
             }
         } else {
-            if (TAB_TITLES == null || TAB_TITLES.length == 2) {
-                TAB_TITLES = new int[]{R.string.tab_text_3};
+            if (TAB_TITLES == null || TAB_TITLES.length == 3) {
+                TAB_TITLES = new int[]{R.string.tab_text_4};
             }
         }
         return mContext.getResources().getString(TAB_TITLES[position]);
@@ -89,9 +89,9 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
      */
     @Override
     public int getCount() {
-        // 依据当前登录的用户权限展示不同的页签，管理员2个（创建用户，修改用户（密码）），普通用户1个（修改密码）
+        // 依据当前登录的用户权限展示不同的页签，管理员3个（创建用户，修改用户,删除用户），普通用户1个（修改密码）
         if (loginRepository.getUser().getLevel().contains("1")) {
-            return 2;
+            return 3;
         }else {
             return 1;
         }

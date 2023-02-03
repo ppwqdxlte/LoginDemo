@@ -33,7 +33,6 @@ public class PageViewModel extends ViewModel {
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
-            // TODO 选项卡片的显示内容在这里修改，
             return "Hello world from section: " + input;
         }
     });
