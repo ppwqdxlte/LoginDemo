@@ -35,16 +35,13 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
      */
     private LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
 
-    private ManagementViewModel managementViewModel;
-
     /**
      * @param context 上下文环境
      * @param fm      页面管理器（根据代码实际表示的是context的子视图管理器）
      */
-    public SectionsPagerAdapter(Context context, FragmentManager fm,ManagementViewModel managementViewModel) {
+    public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
-        this.managementViewModel = managementViewModel;
     }
 
     /**
@@ -60,9 +57,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        PlaceholderFragment placeholderFragment = PlaceholderFragment.newInstance(position + 1);
-        placeholderFragment.setFatherViewModel(managementViewModel);
-        return placeholderFragment;
+        return PlaceholderFragment.newInstance(position + 1);
     }
 
     /**

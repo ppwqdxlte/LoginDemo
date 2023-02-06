@@ -60,7 +60,7 @@ public class ManagementFragment extends Fragment {
         * 【更正】也不是PageViewModel的问题，期间我尝试了很多，没想到最终解决问题的方法居然是 this.getChildFragmentManager()！！
         * 把父fragment的 SectionsPagerAdapter 区域传呼适配器 构造传参的 父FragmentManager 改成 ChildFragmentManager!!!!! */
         /* 【后端】绑【后端】【区段寻呼机适配器】顾名思义，就是把不同段区的设备连接起来，是指可以互相转换通信，tabLayout中的适配器就是把 father View和 son Views之间建立一个信道 */
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), this.getChildFragmentManager(),viewModel);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getContext(), this.getChildFragmentManager());
         /*　UI（XML）视图适配器 */
         ViewPager viewPager = binding.viewpagerManagement;
         /*　【后端】绑【前端】后端适配器绑定到UI适配器　*/
@@ -77,6 +77,5 @@ public class ManagementFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-        getViewModelStore().clear();
     }
 }

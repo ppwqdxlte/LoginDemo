@@ -53,36 +53,42 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = binding.login;
         final ProgressBar loadingProgressBar = binding.loading;
         /* 可变LiveData观察页面表单状态变化，输入不规范会有提醒，满足条件就激活登录按钮 */
-        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
-            if (loginFormState == null) {
-                return;
-            }
-            loginButton.setEnabled(loginFormState.isDataValid());
-            if (loginFormState.getUsernameError() != null) {
-                usernameEditText.setError(getString(loginFormState.getUsernameError()));
-            }
-            if (loginFormState.getPasswordError() != null) {
-                passwordEditText.setError(getString(loginFormState.getPasswordError()));
+        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+            @Override
+            public void onChanged(@Nullable LoginFormState loginFormState) {
+                if (loginFormState == null) {
+                    return;
+                }
+                loginButton.setEnabled(loginFormState.isDataValid());
+                if (loginFormState.getUsernameError() != null) {
+                    usernameEditText.setError(getString(loginFormState.getUsernameError()));
+                }
+                if (loginFormState.getPasswordError() != null) {
+                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
+                }
             }
         });
         /* 可变LiveData观察登录结果的变化，不起眼的方法，在这里登录跳转 */
-        loginViewModel.getLoginResult().observe(this, loginResult -> {
-            if (loginResult == null) {
-                return;
+        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+            @Override
+            public void onChanged(@Nullable LoginResult loginResult) {
+                if (loginResult == null) {
+                    return;
+                }
+                loadingProgressBar.setVisibility(View.GONE);
+                if (loginResult.getError() != null) {
+                    showLoginFailed(loginResult.getError());
+                }
+                if (loginResult.getSuccess() != null) {
+                    updateUiWithUser(loginResult.getSuccess());
+                    // Complete and destroy login activity once successful，登录成功就销毁登陆页面
+                    finish(); // this.finish()调用基类的隐藏方法，从安卓手机后台还能调出来，假的销毁
+                    // 打开主页 【注意】只有在AndroidManifest.xml中声明过的Activity才能被拿来使用
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+                setResult(Activity.RESULT_OK);
             }
-            loadingProgressBar.setVisibility(View.GONE);
-            if (loginResult.getError() != null) {
-                showLoginFailed(loginResult.getError());
-            }
-            if (loginResult.getSuccess() != null) {
-                updateUiWithUser(loginResult.getSuccess());
-                // Complete and destroy login activity once successful，登录成功就销毁登陆页面
-                finish(); // this.finish()调用基类的隐藏方法，从安卓手机后台还能调出来，假的销毁
-                // 打开主页 【注意】只有在AndroidManifest.xml中声明过的Activity才能被拿来使用
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            setResult(Activity.RESULT_OK);
         });
         /* 文本观察员，文字发生改变的监听器 */
         TextWatcher afterTextChangedListener = new TextWatcher() {
@@ -119,11 +125,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
         /* 按钮部件 添加单击监听器 */
-        loginButton.setOnClickListener(v -> {
-            // 显示进度条
-            loadingProgressBar.setVisibility(View.VISIBLE);
-            // 登录，从界面中获取username,password传参
-            loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 显示进度条
+                loadingProgressBar.setVisibility(View.VISIBLE);
+                // 登录，从界面中获取username,password传参
+                loginViewModel.login(usernameEditText.getText().toString(), passwordEditText.getText().toString());
+            }
         });
     }
     /** 登陆成功提示
