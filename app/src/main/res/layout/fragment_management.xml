@@ -21,7 +21,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
-
+        <!-- 用户列表表头-->
         <TextView
             android:id="@+id/text_management"
             android:layout_width="match_parent"
@@ -34,15 +34,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <!-- 用户列表表头-->
-        <TableLayout
-            android:id="@+id/user_list"
+        <!-- 用户列表 -->
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbarFadeDuration="@integer/material_motion_duration_medium_1"
-            android:scrollbarStyle="insideOverlay">
-            <!-- 动态生成table rows -->
-        </TableLayout>
+            android:layout_height="180dp">
+            <TableLayout
+                android:id="@+id/user_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <!-- 动态生成table rows -->
+            </TableLayout>
+        </ScrollView>
         <!-- 分隔线 -->
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
