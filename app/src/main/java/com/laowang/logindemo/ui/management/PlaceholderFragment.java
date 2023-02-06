@@ -26,7 +26,9 @@ public class PlaceholderFragment extends Fragment {
 
     private PageViewModel pageViewModel;
     private FragmentManagementViewpagerBinding binding;
-
+    /**
+     * LoginRepository对象贯穿真个app生命周期，故而可以在别的类中添加这种成员变量，如果换成
+     */
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
     /**
      * 静态时有缓存的效果，缓存当前显示的选项卡名称
@@ -79,15 +81,10 @@ public class PlaceholderFragment extends Fragment {
             Bundle savedInstanceState) {
         binding = FragmentManagementViewpagerBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        /* UI选项卡片的文字区域 */
-        final TextView textView = binding.sectionLabel;
-        /* 【后端】注入数据到【UI前端】 从onCreate()调用viewModel.index_setter()后viewModel.text_getter()的结果就产生变化了...new Observer<String>() {...} */
-        /* 此处逻辑非常有【意思】：一旦后端ViewModel的getter()获取的mText有变化，UI界面就发生变化 */
-        pageViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        /* 选项卡片的显示内容在这里修改，因为2个卡片UI都不一样，最好动态代码修改，而不是写第三层的fragment，
-            因为我估计childFragmentManager只能管理到直接子类页面，更深的后代页面就管不到了。 */
-        renderTabContainer();
-
+        /* 渲染tab卡片 */
+        renderTabs();
+        /* 单击CANCEL清空输入 */
+        binding.sectionBtnCancel.setOnClickListener(v -> cleanInputs());
         return root;
     }
 
@@ -100,46 +97,71 @@ public class PlaceholderFragment extends Fragment {
     /**
      * 渲染选项卡片容器，不同的卡片有不同的组件组合
      */
-    private void renderTabContainer() {
+    private void renderTabs() {
         if (loginRepository.getUser().getLevel().contains("1")) {
             int sectionNumber = this.getArguments() != null ? this.getArguments().getInt(ARG_SECTION_NUMBER) : 0;
             if (sectionNumber == 1) {
                 if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_1))) {
                     tabName = ResourceProvider.getString(R.string.tab_text_1);
-                    renderCreateUserTabcard();
+                    renderCreateUserTab();
                 }
             } else if (sectionNumber == 2) {
                 if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_2))) {
                     tabName = ResourceProvider.getString(R.string.tab_text_2);
-                    renderModifyUserTabcard();
+                    renderModifyUserTab();
                 }
             } else {
                 if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_3))) {
                     tabName = ResourceProvider.getString(R.string.tab_text_3);
-                    renderDeleteUserTabcard();
+                    renderDeleteUserTab();
                 }
             }
         } else {
             if (tabName == null) {
                 tabName = ResourceProvider.getString(R.string.tab_text_4);
-                renderChangePasswordTabcard();
+                renderChangePasswordTab();
             }
         }
     }
 
-    private void renderCreateUserTabcard() {
-        // TODO 增减渲染卡片
+    private void cleanInputs() {
+        binding.sectionUsernameSelected.setText(null);
+        binding.sectionUsernameNew.setText(null);
+        binding.sectionPasswordOld.setText(null);
+        binding.sectionPasswordNew.setText(null);
+        binding.sectionPasswordRepeat.setText(null);
+        binding.sectionAdministrator.setChecked(false);
+        binding.sectionRegularUser.setChecked(false);
     }
 
-    private void renderModifyUserTabcard() {
-        // TODO 增减渲染卡片
+    private void renderCreateUserTab() {
+        binding.sectionUsernameSelected.setVisibility(View.GONE);
+        binding.sectionPasswordOld.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
     }
 
-    private void renderDeleteUserTabcard() {
-        // TODO 增减渲染卡片
+    private void renderModifyUserTab() {
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
     }
 
-    private void renderChangePasswordTabcard() {
-        // TODO 增减渲染卡片
+    private void renderDeleteUserTab() {
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPasswordOld.setVisibility(View.GONE);
+        binding.sectionPasswordNew.setVisibility(View.GONE);
+        binding.sectionPasswordRepeat.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnConfirm.setVisibility(View.GONE);
+    }
+
+    private void renderChangePasswordTab() {
+        binding.sectionUsernameSelected.setVisibility(View.GONE);
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
     }
 }

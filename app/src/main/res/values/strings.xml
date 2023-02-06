@@ -34,9 +34,9 @@
     <string name="tab_text_3">Delete User</string>
     <string name="tab_text_4">Change Password</string>
     <!-- management tab card -->
-    <string name="select_username">Click to select user in \'UserList\' above.</string>
+    <string name="select_username">Click to select user in \'UserList\'.</string>
     <string name="new_username">Please enter a new username.</string>
-    <string name="old_password">Please enter the original password.</string>
+    <string name="old_password">Please enter the old password.</string>
     <string name="new_password">Please enter a new password.</string>
     <string name="repeat_password">Please repeat the password.</string>
     <string name="permission_role">Permission role:</string>
@@ -44,4 +44,5 @@
     <string name="role_regular_user">Regular user</string>
     <string name="btn_confirm">Confirm</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_delete">DELETE</string>
 </resources>
