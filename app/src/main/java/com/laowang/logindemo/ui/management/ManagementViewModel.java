@@ -8,10 +8,10 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.ManagementDataSource;
+import com.laowang.logindemo.data.Result;
 import com.laowang.logindemo.data.model.LoggedInUser;
 
 import java.util.HashMap;
@@ -107,5 +107,14 @@ public class ManagementViewModel extends ViewModel {
         userRow.addView(role);
         userRow.addView(createdTime);
         return userRow;
+    }
+
+    public Result create(String username, String password, int permissionIndex){
+        LoggedInUser user = dataSource.getValue().create(username, password, permissionIndex);
+        if (user != null){
+            return new Result.Success<LoggedInUser>(user);
+        }else {
+            return new Result.Error(new Exception("Fail to add the user!"));
+        }
     }
 }

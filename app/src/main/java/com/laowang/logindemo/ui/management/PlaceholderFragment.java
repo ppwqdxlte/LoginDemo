@@ -1,21 +1,44 @@
 package com.laowang.logindemo.ui.management;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringDef;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.laowang.logindemo.MainActivity;
 import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
+import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.databinding.FragmentManagementViewpagerBinding;
+import com.laowang.logindemo.ui.login.LoggedInUserView;
+import com.laowang.logindemo.ui.login.LoginActivity;
+import com.laowang.logindemo.ui.management.formstate.CreateFormState;
+import com.laowang.logindemo.ui.management.result.CreateResult;
 import com.laowang.logindemo.util.ResourceProvider;
+
+import java.util.Objects;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -28,10 +51,8 @@ public class PlaceholderFragment extends Fragment {
     private FragmentManagementViewpagerBinding binding;
 
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
-    /**
-     * 静态时有缓存的效果，缓存当前显示的选项卡名称
-     */
-    private static String tabName;
+
+    private ManagementViewModel fatherViewModel;
 
     /**
      * 获得选项卡片的实例并确定 页面索引index
@@ -87,6 +108,8 @@ public class PlaceholderFragment extends Fragment {
         /* 选项卡片的显示内容在这里修改，因为2个卡片UI都不一样，最好动态代码修改，而不是写第三层的fragment，
             因为我估计childFragmentManager只能管理到直接子类页面，更深的后代页面就管不到了。 */
         renderTabContainer();
+        // 绑定通用事件监听器
+        cancelButtonOnClick();
 
         return root;
     }
@@ -104,42 +127,133 @@ public class PlaceholderFragment extends Fragment {
         if (loginRepository.getUser().getLevel().contains("1")) {
             int sectionNumber = this.getArguments() != null ? this.getArguments().getInt(ARG_SECTION_NUMBER) : 0;
             if (sectionNumber == 1) {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_1))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_1);
-                    renderCreateUserTabcard();
-                }
+                renderCreateUserTabcard();
             } else if (sectionNumber == 2) {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_2))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_2);
-                    renderModifyUserTabcard();
-                }
+                renderModifyUserTabcard();
             } else {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_3))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_3);
-                    renderDeleteUserTabcard();
-                }
+                renderDeleteUserTabcard();
             }
         } else {
-            if (tabName == null) {
-                tabName = ResourceProvider.getString(R.string.tab_text_4);
-                renderChangePasswordTabcard();
-            }
+            renderChangePasswordTabcard();
         }
     }
 
     private void renderCreateUserTabcard() {
-        // TODO 增减渲染卡片
+        // 先隐藏不必要的小部件
+        binding.sectionUsernameSelected.setVisibility(View.GONE);
+        binding.sectionPasswordOld.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
+        final EditText newUsername = binding.sectionUsernameNew;
+        final EditText newPwd = binding.sectionPasswordNew;
+        final EditText repeatPwd = binding.sectionPasswordRepeat;
+        final TextView roleSpan = binding.sectionPermissionSpan;
+        final RadioGroup rolsGroup = binding.sectionPermissionRole;
+        final Button confirm = binding.sectionBtnConfirm;
+        // 绑定状态监视器
+        pageViewModel.getCreateFormState().observe(getViewLifecycleOwner(), createFormState -> {
+            if (createFormState == null) {
+                return;
+            }
+            confirm.setEnabled(createFormState.isDataValid());
+            if (createFormState.getUsernameError() != null) {
+                newUsername.setError(getString(createFormState.getUsernameError()));
+            }
+            if (createFormState.getPwdError() != null) {
+                newPwd.setError(getString(createFormState.getPwdError()));
+            }
+            if (createFormState.getNotEqualError() != null) {
+                repeatPwd.setError(getString(createFormState.getNotEqualError()));
+            }
+            if (createFormState.getPermissionRoleError() != null) {
+                roleSpan.setError(getString(createFormState.getPermissionRoleError()));
+            }
+        });
+        pageViewModel.getCreateResult().observe(getViewLifecycleOwner(), createResult -> {
+            if (createResult == null) {
+                return;
+            }
+            if (createResult.getError() != null) {
+                showCreateFailed(createResult.getError());
+            }
+            if (createResult.getSuccess() != null) {
+                updateUiWithUserList(createResult.getSuccess());
+                clearTabCardInput();
+            }
+        });
+        // 绑定事件监听器
+        TextWatcher afterTextChangedListner = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                pageViewModel.createDateChanged(fatherViewModel,newUsername.getText().toString(),newPwd.getText().toString(),
+                        repeatPwd.getText().toString());
+            }
+        };
+        newUsername.addTextChangedListener(afterTextChangedListner);
+        newPwd.addTextChangedListener(afterTextChangedListner);
+        repeatPwd.addTextChangedListener(afterTextChangedListner);
+        confirm.setOnClickListener(v -> pageViewModel.create(fatherViewModel,newUsername.getText().toString(),newPwd.getText().toString(),
+                repeatPwd.getText().toString(),rolsGroup.getCheckedRadioButtonId()));
     }
 
     private void renderModifyUserTabcard() {
-        // TODO 增减渲染卡片
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
     }
 
     private void renderDeleteUserTabcard() {
-        // TODO 增减渲染卡片
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPasswordOld.setVisibility(View.GONE);
+        binding.sectionPasswordNew.setVisibility(View.GONE);
+        binding.sectionPasswordRepeat.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnConfirm.setVisibility(View.GONE);
     }
 
     private void renderChangePasswordTabcard() {
-        // TODO 增减渲染卡片
+        binding.sectionUsernameSelected.setVisibility(View.GONE);
+        binding.sectionUsernameNew.setVisibility(View.GONE);
+        binding.sectionPermissionSpan.setVisibility(View.GONE);
+        binding.sectionPermissionRole.setVisibility(View.GONE);
+        binding.sectionBtnDelete.setVisibility(View.GONE);
+    }
+
+    private void cancelButtonOnClick() {
+        binding.sectionBtnCancel.setOnClickListener(v -> {
+            clearTabCardInput();
+        });
+    }
+
+    private void clearTabCardInput() {
+        binding.sectionUsernameSelected.setText(null);
+        binding.sectionUsernameNew.setText(null);
+        binding.sectionPasswordOld.setText(null);
+        binding.sectionPasswordNew.setText(null);
+        binding.sectionPasswordRepeat.setText(null);
+        binding.sectionAdministrator.setChecked(false);
+        binding.sectionRegularUser.setChecked(false);
+    }
+
+    private void showCreateFailed(@StringRes Integer errorString) {
+        Toast.makeText(getContext(),errorString,Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateUiWithUserList(LoggedInUserView success) {
+        String successMsg = "Creat "+ success.getDisplayName()+ " successfully!";
+        Toast.makeText(getContext(), successMsg,Toast.LENGTH_LONG).show();
+    }
+
+    public void setFatherViewModel(ManagementViewModel fatherViewModel) {
+        this.fatherViewModel = fatherViewModel;
     }
 }
