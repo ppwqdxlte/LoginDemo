@@ -1,6 +1,8 @@
 package com.laowang.logindemo.ui.management;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,10 +33,6 @@ public class PlaceholderFragment extends Fragment {
      * LoginRepository对象贯穿真个app生命周期，故而可以在别的类中添加这种成员变量，如果换成
      */
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
-    /**
-     * 静态时有缓存的效果，缓存当前显示的选项卡名称
-     */
-    private static String tabName;
 
     /**
      * 获得选项卡片的实例并确定 页面索引index
@@ -118,26 +116,14 @@ public class PlaceholderFragment extends Fragment {
         if (loginRepository.getUser().getLevel().contains("1")) {
             int sectionNumber = this.getArguments() != null ? this.getArguments().getInt(ARG_SECTION_NUMBER) : 0;
             if (sectionNumber == 1) {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_1))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_1);
-                    renderCreateUserTab();
-                }
+                renderCreateUserTab();
             } else if (sectionNumber == 2) {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_2))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_2);
-                    renderModifyUserTab();
-                }
+                renderModifyUserTab();
             } else {
-                if (tabName == null || !tabName.equals(ResourceProvider.getString(R.string.tab_text_3))) {
-                    tabName = ResourceProvider.getString(R.string.tab_text_3);
-                    renderDeleteUserTab();
-                }
+                renderDeleteUserTab();
             }
         } else {
-            if (tabName == null) {
-                tabName = ResourceProvider.getString(R.string.tab_text_4);
-                renderChangePasswordTab();
-            }
+            renderChangePasswordTab();
         }
     }
 
@@ -155,9 +141,14 @@ public class PlaceholderFragment extends Fragment {
         binding.sectionUsernameSelected.setVisibility(View.GONE);
         binding.sectionPasswordOld.setVisibility(View.GONE);
         binding.sectionBtnDelete.setVisibility(View.GONE);
-        /* 【问题来了】到底在这里绑定控件事件呢还是在外面绑定呢？【答】这里，因为可以减少不必要编译
-        *  【如何避免state状态混乱的 BUG ？】【答】还记得【数据倒灌】吗？就是你其它地方输入状态在切换tab或者重新
+        /*【问题来了】到底在这里绑定控件事件呢还是在外面绑定呢？【答】这里，因为可以减少不必要编译
+        * 【如何避免state状态混乱的 BUG ？】【答】还记得【数据倒灌】吗？就是你其它地方输入状态在切换tab或者重新
         * 跳入管理页时候都会显示不该显示的提示，诸如此类都属于该现象，so有必要 getViewModelStore().clear()　*/
+        /*【formState对象】pageViewModel保存着表单状态，定义个PageFormStage类，类似于LoginFormState
+        * 【XxxResult对象】管理页都是对LoggedInUser对象的操作，故可延用LoginResult，copy出一份UserMngResult即可
+        * 对于User增删改通用类PageFormState 和 UserMngResult ，PageViewModel要有通用的方法去验证和改变状态 */
+        // TODO 绑定状态监视器和事件监听器
+
     }
 
     private void renderModifyUserTab() {
