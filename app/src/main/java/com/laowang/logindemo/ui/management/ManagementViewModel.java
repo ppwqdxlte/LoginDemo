@@ -20,6 +20,13 @@ import java.util.Map;
 
 /**
  * 视图模型应该处理数据有关，management页面肯定不止文字啦！还有 grid列表，底部tab页签，每个tab页还要包含 输入框 和 按钮！！
+ * 【NOTE】ViewModel 将数据保留在内存中，这意味着开销要低于从磁盘或网络检索数据。
+ * ViewModel 与一个 Activity（或其他某个生命周期所有者）相关联，在配置更改期间保留在内存中，
+ * 系统会自动将 ViewModel 与发生配置更改后产生的新 Activity 实例相关联。
+ *
+ * 【数据倒灌】现象 eg.
+ * https://blog.csdn.net/weixin_39798626/article/details/112291113
+ * https://blog.csdn.net/Jason_Lee155/article/details/119966408?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-119966408-blog-112291113.pc_relevant_3mothn_strategy_recovery&spm=1001.2101.3001.4242.1&utm_relevant_index=3
  */
 public class ManagementViewModel extends ViewModel {
     //    private static AtomicInteger count = new AtomicInteger(0);
@@ -65,7 +72,7 @@ public class ManagementViewModel extends ViewModel {
             for (int i = 0; i < users.size(); i++) {
                 LoggedInUser user = users.get(i);
                 TableRow tableRow = addUserInfoInRow(context, user, i + 1);
-                mTableRows.getValue().put(user.getDisplayName(),tableRow);
+                mTableRows.getValue().put(user.getDisplayName(), tableRow);
             }
         } else {
             if (!mTableRows.getValue().containsKey(loggedInUser.getDisplayName())) { // 尚不包含
@@ -78,7 +85,7 @@ public class ManagementViewModel extends ViewModel {
     private TableRow addUserInfoInRow(Context context, LoggedInUser user, int serialnumber) {
         TableRow userRow = new TableRow(context);
         TextView sn = new TextView(context);
-        sn.setText(serialnumber+"");
+        sn.setText(serialnumber + "");
         TextView username = new TextView(context);
         username.setText(user.getDisplayName());
         TextView role = new TextView(context);

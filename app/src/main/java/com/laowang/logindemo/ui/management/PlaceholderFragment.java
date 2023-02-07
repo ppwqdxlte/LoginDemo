@@ -1,6 +1,7 @@
 package com.laowang.logindemo.ui.management;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +93,22 @@ public class PlaceholderFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        /* 根据网友关于【数据倒灌】的源码分析产生的灵感，就是在销毁 fragment 时候防止乱七八糟的设置而导致无法清空ViewModel对象，还没写交互代码，但愿可以解决之前的BUG
+        * 【上句话简直是一厢情愿】，还没写tab逻辑呢，从home或者token页面跳回management页面时候，依然有数据倒灌！那到底应该怎么彻底清空呢？
+        * 【上句话也是不明白】，input的用户密码啥的会保存，也许这种现象不算是 ViewModel 的【数据倒灌】！
+        * 【根据业务需要】 ManagementViewModel对象（因为保存用户列表，create不能重名就得查它），但是不必笨拙的用 */
+        getViewModelStore().clear();
+    }
+
+    /**
+     * 保存实例状态时候的操作
+     *
+     * @param outState 当前页面的外部页面（父页面）的一捆状态
+     */
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+//        默认保存父类View的状态，如果不注释掉，那么 this.getActivity()获取的父容器已经销毁了就会报空指针异常
+//        super.onSaveInstanceState(outState);
     }
 
     /**

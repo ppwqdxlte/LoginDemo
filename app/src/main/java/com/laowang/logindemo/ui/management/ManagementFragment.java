@@ -77,5 +77,6 @@ public class ManagementFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+//        getViewModelStore().clear(); 感觉没必要清空，因为页面还要用到该对象
     }
 }
