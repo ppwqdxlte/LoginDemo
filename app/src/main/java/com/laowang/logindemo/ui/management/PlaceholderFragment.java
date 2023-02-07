@@ -95,8 +95,8 @@ public class PlaceholderFragment extends Fragment {
         binding = null;
         /* 根据网友关于【数据倒灌】的源码分析产生的灵感，就是在销毁 fragment 时候防止乱七八糟的设置而导致无法清空ViewModel对象，还没写交互代码，但愿可以解决之前的BUG
         * 【上句话简直是一厢情愿】，还没写tab逻辑呢，从home或者token页面跳回management页面时候，依然有数据倒灌！那到底应该怎么彻底清空呢？
-        * 【上句话也是不明白】，input的用户密码啥的会保存，也许这种现象不算是 ViewModel 的【数据倒灌】！
-        * 【根据业务需要】 ManagementViewModel对象（因为保存用户列表，create不能重名就得查它），但是不必笨拙的用 */
+        * 【上句话也是不明白】，input的用户密码啥的会保存，也许这种现象不算是 ViewModel 的【数据倒灌】！而PageViewModel中的fromState对象才是需要清空的！
+        * 【根据业务需要】 ManagementViewModel对象（因为保存用户列表，create不能重名就得查它）不必清空，而tab页面的viewModel需要清空，故而只在这里调用即可 */
         getViewModelStore().clear();
     }
 
@@ -155,6 +155,9 @@ public class PlaceholderFragment extends Fragment {
         binding.sectionUsernameSelected.setVisibility(View.GONE);
         binding.sectionPasswordOld.setVisibility(View.GONE);
         binding.sectionBtnDelete.setVisibility(View.GONE);
+        /* 【问题来了】到底在这里绑定控件事件呢还是在外面绑定呢？【答】这里，因为可以减少不必要编译
+        *  【如何避免state状态混乱的 BUG ？】【答】还记得【数据倒灌】吗？就是你其它地方输入状态在切换tab或者重新
+        * 跳入管理页时候都会显示不该显示的提示，诸如此类都属于该现象，so有必要 getViewModelStore().clear()　*/
     }
 
     private void renderModifyUserTab() {
