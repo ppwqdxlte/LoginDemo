@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="@dimen/activity_horizontal_margin"
     android:background="@color/tab_card_background"
-    tools:context=".ui.management.PlaceholderFragment">
+    tools:context=".ui.management.TabFragment">
     <!-- selected user -->
     <EditText
         android:id="@+id/section_username_selected"

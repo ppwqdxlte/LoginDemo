@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.laowang.logindemo.ui.management.ManagementFragment"
+        android:name="com.laowang.logindemo.ui.management.MngFragment"
         android:label="@string/menu_management"
         tools:layout="@layout/fragment_management" />
 

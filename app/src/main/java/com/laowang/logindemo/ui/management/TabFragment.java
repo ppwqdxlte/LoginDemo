@@ -1,29 +1,22 @@
 package com.laowang.logindemo.ui.management;
 
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.databinding.FragmentManagementViewpagerBinding;
-import com.laowang.logindemo.util.ResourceProvider;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class TabFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -40,8 +33,8 @@ public class PlaceholderFragment extends Fragment {
      * @param index 选项卡片的index索引，从1开始
      * @return 选项卡片实例
      */
-    public static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static TabFragment newInstance(int index) {
+        TabFragment fragment = new TabFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);

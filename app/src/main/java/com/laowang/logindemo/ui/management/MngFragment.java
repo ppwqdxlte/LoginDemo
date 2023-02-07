@@ -17,7 +17,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.laowang.logindemo.databinding.FragmentManagementBinding;
 import com.laowang.logindemo.util.ResourceProvider;
 
-public class ManagementFragment extends Fragment {
+public class MngFragment extends Fragment {
 //    private static AtomicInteger count = new AtomicInteger(0);
     private FragmentManagementBinding binding;
 
@@ -27,8 +27,8 @@ public class ManagementFragment extends Fragment {
         // 初始化 ResourceProvider 的上下文，注意，必须要在ManagementViewModel构造方法之前执行
         ResourceProvider.setmCtx(getContext());
         // 初始化 ManagementViewModel对象
-        ManagementViewModel viewModel =
-                new ViewModelProvider(this).get(ManagementViewModel.class);
+        MngViewModel viewModel =
+                new ViewModelProvider(this).get(MngViewModel.class);
         /* 充气 */
         binding = FragmentManagementBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

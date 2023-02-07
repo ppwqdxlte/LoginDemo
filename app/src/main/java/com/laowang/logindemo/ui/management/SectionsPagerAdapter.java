@@ -1,7 +1,6 @@
 package com.laowang.logindemo.ui.management;
 
 import android.content.Context;
-import android.widget.TableRow;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -57,7 +56,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        return TabFragment.newInstance(position + 1);
     }
 
     /**

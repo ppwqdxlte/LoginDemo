@@ -1,22 +1,18 @@
 package com.laowang.logindemo.data;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
 import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.util.RestfulApiHandler;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
  * 用户管理页的数据源.
  */
-public class ManagementDataSource {
+public class MngDataSource {
     /**
      * REST接口通用访问工具
      */

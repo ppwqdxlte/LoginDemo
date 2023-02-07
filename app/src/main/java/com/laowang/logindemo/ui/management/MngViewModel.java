@@ -8,10 +8,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
-import com.laowang.logindemo.data.ManagementDataSource;
+import com.laowang.logindemo.data.MngDataSource;
 import com.laowang.logindemo.data.model.LoggedInUser;
 
 import java.util.HashMap;
@@ -28,12 +27,12 @@ import java.util.Map;
  * https://blog.csdn.net/weixin_39798626/article/details/112291113
  * https://blog.csdn.net/Jason_Lee155/article/details/119966408?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-119966408-blog-112291113.pc_relevant_3mothn_strategy_recovery&spm=1001.2101.3001.4242.1&utm_relevant_index=3
  */
-public class ManagementViewModel extends ViewModel {
+public class MngViewModel extends ViewModel {
     //    private static AtomicInteger count = new AtomicInteger(0);
     /* 调用LoginRepository保存当前用户的状态 */
     private final LiveData<LoginRepository> loginRepository;
     /* 数据源 */
-    private final LiveData<ManagementDataSource> dataSource;
+    private final LiveData<MngDataSource> dataSource;
     // 旧代码
     private final MutableLiveData<String> mText;
     /**
@@ -41,11 +40,11 @@ public class ManagementViewModel extends ViewModel {
      */
     private final MutableLiveData<Map<String, TableRow>> mTableRows;
 
-    public ManagementViewModel() {
+    public MngViewModel() {
         /* Log.e("管理视图模型","创建了"+count.incrementAndGet()+"次。"); 始终 只有 1 次，说明页面生命周期中视图模型对象只会创建一次，
         如果只在构造方法获得数据，那么app运行期间都不会得到刷新！所以比如列表的获取，应该在 activity中查询，每次进入页面都会得到刷新！！！ */
         loginRepository = new MutableLiveData<>(LoginRepository.getInstance(new LoginDataSource()));
-        dataSource = new MutableLiveData<>(new ManagementDataSource());
+        dataSource = new MutableLiveData<>(new MngDataSource());
         mText = new MutableLiveData<>();
         mText.setValue("USER LIST");
         mTableRows = new MutableLiveData<>();
