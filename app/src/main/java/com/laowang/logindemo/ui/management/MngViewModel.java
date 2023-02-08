@@ -69,6 +69,11 @@ public class MngViewModel extends ViewModel {
     public MutableLiveData<Map<String, ManagedUser>> getmManagedUsers() {
         return mManagedUsers;
     }
+
+    public LiveData<MngDataSource> getDataSource() {
+        return dataSource;
+    }
+
     /**
      * 用户权限1就查询所有用户，权限level==0则只放自己的信息
      */

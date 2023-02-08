@@ -17,4 +17,8 @@ public class ApiUrl {
      * API后缀 修改用户密码
      */
     public static String API_PASSWORD = "/changePassword";
+    /**
+     * API后缀 新增用户
+     */
+    public static final String API_CREATE_USER = "/createUser";
 }

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -80,6 +82,8 @@ public class TabFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+        /* attachToParent 参数 从false 改成true,会发生啥呢？【答】会发生 IllegalStateException:
+        The specified child already has a parent. You must call removeView() on the child's parent first.*/
         binding = FragmentManagementViewpagerBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         /* 渲染tab卡片 */
@@ -87,7 +91,7 @@ public class TabFragment extends Fragment {
         /* 单击CANCEL清空输入 */
         binding.sectionBtnCancel.setOnClickListener(v -> cleanInputs());
 //        Log.e("pageModelView",pageViewModel.toString());
-        /* TODO bug太难了，操。观察 UserFormState 表单状态变化，错误提示，CONFIRM按钮激活或沉睡 */
+        /* 观察 UserFormState 表单状态变化，错误提示，CONFIRM按钮激活或沉睡 */
         observeUserFormState();
         /* 观察 UserMngResult 结果的变化，Toast显示弹出结果消息，成功还需清空 mUserFormState属性*/
         observeUserMngResult();
@@ -136,24 +140,15 @@ public class TabFragment extends Fragment {
     }
 
     /**
-     * 清空表单错误状态
-     */
-    private void cleanInputError() {
-        pageViewModel.getmUserFormState().getValue().setNewNameError(null);
-        pageViewModel.getmUserFormState().getValue().setNewPwdError(null);
-        pageViewModel.getmUserFormState().getValue().setRepeatPwdError(null);
-        pageViewModel.getmUserFormState().getValue().setOldPwdError(null);
-        pageViewModel.getmUserFormState().getValue().setRoleError(null);
-    }
-
-    /**
      * 观察pageViewModel.表单状态对象的属性变化
      */
     private void observeUserFormState() {
         pageViewModel.getmUserFormState().observe(getViewLifecycleOwner(), userFormState -> {
 //            Log.e("userFormState",userFormState.toString());
             if (userFormState == null) return;
-//            binding.sectionBtnConfirm.setEnabled(userFormState.getDataValid());
+            boolean isDataValid = userFormState.getDataValid() != null && userFormState.getDataValid();
+            binding.sectionBtnConfirm.setEnabled(isDataValid);
+            binding.sectionBtnDelete.setEnabled(isDataValid);
             if (userFormState.getNewNameError() != null && userFormState.getNewNameError() != 1) {
                 binding.sectionUsernameNew.setError(getString(userFormState.getNewNameError()));
             }
@@ -169,6 +164,9 @@ public class TabFragment extends Fragment {
             if (userFormState.getRoleError() != null && userFormState.getRoleError() != 1) {
                 binding.sectionPermissionSpan.setError(getString(userFormState.getRoleError()));
             }
+            if (userFormState.getSelectedNameError() != null && userFormState.getSelectedNameError() != 1) {
+                binding.sectionUsernameSelected.setError(getString(userFormState.getSelectedNameError()));
+            }
         });
     }
 
@@ -179,13 +177,17 @@ public class TabFragment extends Fragment {
         pageViewModel.getmUserMngResult().observe(getViewLifecycleOwner(), userMngResult -> {
             if (userMngResult == null) return;
             if (userMngResult.getErrorCode() != null && userMngResult.getErrorCode() != 1) {
-                Toast.makeText(getContext(), userMngResult.getErrorCode(), Toast.LENGTH_SHORT).show();
+                int errorCode = userMngResult.getErrorCode();
+                Toast.makeText(getActivity(), errorCode, Toast.LENGTH_SHORT).show();
             }
             if (userMngResult.getSuccessCode() != null) {
-                Toast.makeText(getContext(), userMngResult.getSuccessCode(), Toast.LENGTH_SHORT).show();
+                int successCode = userMngResult.getSuccessCode();
+                Toast.makeText(getActivity(), successCode, Toast.LENGTH_SHORT).show();
             }
-            // TODO 轻易别调用这个，可能有问题！
-//            getActivity().setResult(Activity.RESULT_OK);
+            // 清除结果状态，否则Toast每次刷新fragment都会显示一遍。
+            pageViewModel.setmUserMngResult(null);
+            // 清空表单输入
+            cleanInputs();
         });
     }
 
@@ -207,15 +209,25 @@ public class TabFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-//                Log.e("TextChanged:::Editable s===>  ",s.getClass().getName());
-//                Log.e("",s.toString());
+                /* 虽是通用UI部件，毕竟也是不同表单，其它表单有的部件错误会影响当前页面的状态！formDataChanged方法重载实现差异性的逻辑 */
                 // 影响 userFormState 的属性变化，EditText.getText()永远不为null，所以最少是空字符串
-                pageViewModel.formDataChanged(new ViewModelProvider(getParentFragment()).get(MngViewModel.class),
-                        binding.sectionUsernameNew.getText().toString(),
-                        binding.sectionPasswordNew.getText().toString(),
-                        binding.sectionPasswordRepeat.getText().toString(),
-                        binding.sectionPasswordOld.getText().toString(),
-                        binding.sectionUsernameSelected.getText().toString());
+                MngViewModel mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
+                String username = binding.sectionUsernameNew.getText().toString();
+                String newPwd = binding.sectionPasswordNew.getText().toString();
+                String repeatPwd = binding.sectionPasswordRepeat.getText().toString();
+                String oldPwd = binding.sectionPasswordOld.getText().toString();
+                String selectedName = binding.sectionUsernameSelected.getText().toString();
+                if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
+                    pageViewModel.formDataChanged(mngViewModel, username, newPwd, repeatPwd);
+                } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
+                        && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
+                    pageViewModel.formDataChanged(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
+                } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
+                        && binding.sectionUsernameSelected.getVisibility() == View.INVISIBLE) {  // change password
+                    pageViewModel.formDataChanged(oldPwd, newPwd, repeatPwd, mngViewModel);
+                } else {                                                                        // delete user
+                    pageViewModel.formDataChanged(selectedName);
+                }
             }
         };
         // 给控件绑定监听器
@@ -223,6 +235,7 @@ public class TabFragment extends Fragment {
         binding.sectionPasswordNew.addTextChangedListener(textChangedListener);
         binding.sectionPasswordRepeat.addTextChangedListener(textChangedListener);
         binding.sectionPasswordOld.addTextChangedListener(textChangedListener);
+        binding.sectionUsernameSelected.addTextChangedListener(textChangedListener);
     }
 
     /**
@@ -233,13 +246,18 @@ public class TabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
-                    /*pageViewModel.createUser(binding.sectionUsernameNew.getText().toString(),
-                            );*/
+                    assert getParentFragment() != null;
+                    MngViewModel mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
+                    pageViewModel.createUser(mngViewModel,
+                            binding.sectionUsernameNew.getText().toString(),
+                            binding.sectionPasswordNew.getText().toString(),
+                            binding.sectionPasswordRepeat.getText().toString(),
+                            binding.sectionRegularUser.isChecked() ? 0 : 1);
                 } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
                         && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
-
-                } else {        // change password
-
+                    // TODO 修改用户
+                } else {                                                                        // change password
+                    // TODO 修改密码
                 }
             }
         });
@@ -249,7 +267,7 @@ public class TabFragment extends Fragment {
      * 监听删除按钮单击事件
      */
     private void listenDeleteClicked() {
-
+        // TODO 删除监听器
     }
 
     /**
