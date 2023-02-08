@@ -13,7 +13,7 @@ public class UserFormState {
 
     private Boolean isDataValid;    // 数据是否合法，以下 的交集
     @Nullable
-    private Integer newNameError;   // 新用户名不符合规范【为空 或 长度太长太短】
+    private Integer newNameError;   // 新用户名不符合规范【为空 或 长度太长太短】 null 或 1 表示没问题，下述同理
     @Nullable
     private Integer newPwdError;    // 新密码。。      【为空 或 长度太长太短】
     @Nullable
@@ -36,8 +36,11 @@ public class UserFormState {
     }
 
     public Boolean getDataValid() {
-        if (newNameError != null || newPwdError != null || repeatPwdError != null ||
-                oldPwdError != null || roleError != null) {
+        if (newNameError != null && newNameError != 1 ||
+                newPwdError != null && newPwdError != 1 ||
+                repeatPwdError != null && repeatPwdError != 1 ||
+                oldPwdError != null && oldPwdError != 1 ||
+                roleError != null && roleError != 1) {
             isDataValid = false;
         } else {
             isDataValid = true;

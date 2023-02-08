@@ -98,17 +98,18 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/section_permission_span">
         <RadioButton
+            android:id="@+id/section_regular_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:hint="@string/role_regular_user"
+            android:autofillHints="@string/role_regular_user" />
+        <RadioButton
             android:id="@+id/section_administrator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/role_administrator"
             android:autofillHints="@string/role_administrator" />
-        <RadioButton
-            android:id="@+id/section_regular_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/role_regular_user"
-            android:autofillHints="@string/role_regular_user" />
     </RadioGroup>
     <!-- confirm button -->
     <Button

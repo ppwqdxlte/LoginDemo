@@ -45,4 +45,24 @@
     <string name="btn_confirm">Confirm</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_delete">DELETE</string>
+    <!-- form error -->
+    <string name="err_name_exist">Username already exists.</string>
+    <string name="err_username_null">Username can\'t be empty.</string>
+    <string name="err_username_length">Username\'s length is &gt; 3 and &lt; 19.</string>
+    <string name="err_pwd_null">Password can\'t be empty.</string>
+    <string name="err_pwd_length">Password\'s length is &gt; 3 and &lt; 19.</string>
+    <string name="err_pwd_not_equal">Inconsistent passwords!</string>
+    <string name="err_pwd_equal">New password can\'t be same as old. </string>
+    <string name="err_pwd_old">Old password is incorrect.</string>
+    <string name="err_role_uncheck">Please select a role.</string>
+    <!-- user management result -->
+    <string name="result_success_create_user">Successfully added user!</string>
+    <string name="result_fail_create_user">Failed to add user. </string>
+    <string name="result_success_modify_user">Successfully modified user!</string>
+    <string name="result_fail_modify_user">Failed to modify user. </string>
+    <string name="result_success_delete_user">Successfully deleted user!</string>
+    <string name="result_fail_delete_user">Failed to delete user. </string>
+    <string name="result_success_change_pwd">Successfully deleted user!</string>
+    <string name="result_fail_change_pwd">Failed to delete user. </string>
+    <string name="err_select_user">Please select a user from above.</string>
 </resources>
