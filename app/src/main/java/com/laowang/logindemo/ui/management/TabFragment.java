@@ -37,6 +37,10 @@ public class TabFragment extends Fragment {
      * LoginRepository对象贯穿真个app生命周期，故而可以在别的类中添加这种成员变量，如果换成
      */
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
+    /**
+     * 因为调用太多次，所以干脆作为成员变量
+     */
+    private MngViewModel mngViewModel;
 
     /**
      * 获得选项卡片的实例并确定 页面索引index
@@ -60,6 +64,7 @@ public class TabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
         /* 初始化 pageViewModel视图模型对象 */
         pageViewModel = new ViewModelProvider(getParentFragment()).get(PageViewModel.class);
         int index = 1;
@@ -95,6 +100,8 @@ public class TabFragment extends Fragment {
         observeUserFormState();
         /* 观察 UserMngResult 结果的变化，Toast显示弹出结果消息，成功还需清空 mUserFormState属性*/
         observeUserMngResult();
+        /* 观察 selectedName 的变化，selected文本框显示选中的用户名 */
+        observeSelectedName();
         /* EditText变化监听 */
         listenTextChanged();
         /* 单击 CONFIRM 提交，清空inputs，清空 mUserFormState属性 */
@@ -113,6 +120,7 @@ public class TabFragment extends Fragment {
          * 【上句话也是不明白】，input的用户密码啥的会保存，也许这种现象不算是 ViewModel 的【数据倒灌】！而PageViewModel中的fromState对象才是需要清空的！
          * 【根据业务需要】 ManagementViewModel对象（因为保存用户列表，create不能重名就得查它）不必清空，而tab页面的viewModel需要清空，故而只在这里调用即可 */
 //        getViewModelStore().clear();
+        /* 【BUG】奇葩的是tab2到别的选项卡页，虽然不执行onCreate()吧，但是却执行了onDestroyView()...... */
     }
 
     /**
@@ -192,10 +200,17 @@ public class TabFragment extends Fragment {
     }
 
     /**
+     * 观察【selectedName】的变化
+     */
+    private void observeSelectedName() {
+        mngViewModel.getmSelectedName().observe(getViewLifecycleOwner(), s -> binding.sectionUsernameSelected.setText(s));
+    }
+
+    /**
      * 监听文本改变，修改表单状态
      */
     private void listenTextChanged() {
-        // 准备好监听器
+        // 准备好监听器 tab2正常，难道要用这种方式？先定义 listener，然后 add?【No!】tableRow没有这个方式，且执行不到onCreate在tab2时候。。。
         TextWatcher textChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -211,7 +226,6 @@ public class TabFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 /* 虽是通用UI部件，毕竟也是不同表单，其它表单有的部件错误会影响当前页面的状态！formDataChanged方法重载实现差异性的逻辑 */
                 // 影响 userFormState 的属性变化，EditText.getText()永远不为null，所以最少是空字符串
-                MngViewModel mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
                 String username = binding.sectionUsernameNew.getText().toString();
                 String newPwd = binding.sectionPasswordNew.getText().toString();
                 String repeatPwd = binding.sectionPasswordRepeat.getText().toString();
@@ -246,8 +260,6 @@ public class TabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
-                    assert getParentFragment() != null;
-                    MngViewModel mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
                     pageViewModel.createUser(mngViewModel,
                             binding.sectionUsernameNew.getText().toString(),
                             binding.sectionPasswordNew.getText().toString(),
