@@ -238,7 +238,7 @@ public class TabFragment extends Fragment {
                         && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
                     pageViewModel.formDataChanged(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
                 } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
-                        && binding.sectionUsernameSelected.getVisibility() == View.INVISIBLE) {  // change password
+                        && binding.sectionUsernameSelected.getVisibility() != View.VISIBLE) {  // change password
                     pageViewModel.formDataChanged(oldPwd, newPwd, repeatPwd, mngViewModel);
                 } else {                                                                        // delete user
                     pageViewModel.formDataChanged(selectedName);
@@ -272,7 +272,7 @@ public class TabFragment extends Fragment {
                 pageViewModel.modifyUser(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
             } else {                                                                        // change password
                 // 修改密码
-                pageViewModel.changePassword(newPwd, repeatPwd);
+                pageViewModel.changePassword(mngViewModel, newPwd, repeatPwd);
             }
         });
     }
