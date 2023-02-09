@@ -14,6 +14,8 @@ import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.Result;
 import com.laowang.logindemo.data.model.ManagedUser;
 
+import java.util.Objects;
+
 /**
  * Tab页签的页面区视图模型
  */
@@ -149,6 +151,35 @@ public class PageViewModel extends ViewModel {
         } else {
             // 添加失败提示
             UserMngResult userMngResult = new UserMngResult(R.string.result_fail_create_user);
+            mUserMngResult.setValue(userMngResult);
+        }
+    }
+
+    public void modifyUser(MngViewModel mngViewModel, String selectedName, String oldPwd, String newPwd, String repeatPwd) {
+        // TODO modify user
+    }
+
+    public void changePassword(String newPwd, String repeatPwd) {
+        // TODO change password
+    }
+
+    public void deleteUser(MngViewModel mngViewModel,String selectedName) {
+        // 提交时表单验证+预设结果
+        Integer resultCode = null;
+        if ((resultCode = (isSelectednameMeet(selectedName))) != 1) {
+            UserMngResult userMngResult = new UserMngResult(resultCode);
+            mUserMngResult.setValue(userMngResult);
+            return;
+        }
+        Result<ManagedUser> result = mngViewModel.getDataSource().getValue().deleteUser(selectedName);
+        // 设置 delete 结果消息提示
+        if (result instanceof Result.Success) {
+            ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+            UserMngResult userMngResult = new UserMngResult(data,R.string.result_success_delete_user);
+            mUserMngResult.setValue(userMngResult);
+        } else {
+            // 删除失败提示
+            UserMngResult userMngResult = new UserMngResult(R.string.result_fail_delete_user);
             mUserMngResult.setValue(userMngResult);
         }
     }

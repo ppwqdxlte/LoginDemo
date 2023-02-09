@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -256,21 +257,22 @@ public class TabFragment extends Fragment {
      * 监听提交按钮单击事件
      */
     private void listenConfirmClicked() {
-        binding.sectionBtnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
-                    pageViewModel.createUser(mngViewModel,
-                            binding.sectionUsernameNew.getText().toString(),
-                            binding.sectionPasswordNew.getText().toString(),
-                            binding.sectionPasswordRepeat.getText().toString(),
-                            binding.sectionRegularUser.isChecked() ? 0 : 1);
-                } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
-                        && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
-                    // TODO 修改用户
-                } else {                                                                        // change password
-                    // TODO 修改密码
-                }
+        binding.sectionBtnConfirm.setOnClickListener(v -> {
+            String newUsername = binding.sectionUsernameNew.getText().toString();
+            String newPwd = binding.sectionPasswordNew.getText().toString();
+            String repeatPwd = binding.sectionPasswordRepeat.getText().toString();
+            RadioButton regular = binding.sectionRegularUser;
+            String selectedName = binding.sectionUsernameSelected.getText().toString();
+            String oldPwd = binding.sectionPasswordOld.getText().toString();
+            if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
+                pageViewModel.createUser(mngViewModel, newUsername, newPwd, repeatPwd, regular.isChecked() ? 0 : 1);
+            } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
+                    && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
+                // 修改用户
+                pageViewModel.modifyUser(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
+            } else {                                                                        // change password
+                // 修改密码
+                pageViewModel.changePassword(newPwd, repeatPwd);
             }
         });
     }
@@ -279,7 +281,8 @@ public class TabFragment extends Fragment {
      * 监听删除按钮单击事件
      */
     private void listenDeleteClicked() {
-        // TODO 删除监听器
+        // 删除监听器
+        binding.sectionBtnDelete.setOnClickListener(v -> pageViewModel.deleteUser(mngViewModel, binding.sectionUsernameSelected.getText().toString()));
     }
 
     /**
