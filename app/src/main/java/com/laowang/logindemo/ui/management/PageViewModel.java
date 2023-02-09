@@ -179,8 +179,30 @@ public class PageViewModel extends ViewModel {
         }
     }
 
-    public void changePassword(String newPwd, String repeatPwd) {
-        // TODO change password
+    public void changePassword(MngViewModel mngViewModel, String newPwd, String repeatPwd) {
+        LoginRepository instance = LoginRepository.getInstance(new LoginDataSource());
+        String username = instance.getUser().getDisplayName();
+        String oldPwd = instance.getUser().getPassword();
+        // 提交时表单验证+预设结果
+        Integer resultCode = null;
+        if ((resultCode = (isOldpwdMeet(mngViewModel, oldPwd, username))) != 1
+                || (resultCode = (isNewpwdMeet(newPwd))) != 1
+                || (resultCode = (isRepeatpwdMeet(newPwd, repeatPwd))) != 1) {
+            UserMngResult userMngResult = new UserMngResult(resultCode);
+            mUserMngResult.setValue(userMngResult);
+            return;
+        }
+        Result<ManagedUser> result = mngViewModel.getDataSource().getValue().changePassword(username, oldPwd, newPwd, repeatPwd);
+        // 设置 change 结果消息提示
+        if (result instanceof Result.Success) {
+            ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+            UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_change_pwd);
+            mUserMngResult.setValue(userMngResult);
+        } else {
+            // 改密失败提示
+            UserMngResult userMngResult = new UserMngResult(R.string.result_fail_change_pwd);
+            mUserMngResult.setValue(userMngResult);
+        }
     }
 
     public void deleteUser(MngViewModel mngViewModel, String selectedName) {

@@ -138,4 +138,33 @@ public class MngDataSource {
             return (Result.Problem) result[0];
         }
     }
+
+    public Result<ManagedUser> changePassword(String username, String oldPwd, String newPwd, String repeatPwd) {
+        ManagedUser managedUser = null;
+        String strUrl = ApiUrl.API_BASE + ApiUrl.API_PASSWORD;
+        Map<String, String> params = new HashMap<>();
+        params.put("username", username);
+        params.put("oldPwd", oldPwd);
+        params.put("newPwd01", newPwd);
+        params.put("newPwd02", repeatPwd);
+        Result<String>[] result = restfulApiHandler.postSync(null, strUrl, params);
+        while (result[0] == null) {
+        }
+        if (result[0] instanceof Result.Success) {
+            Result.Success<String> success = (Result.Success<String>) result[0];
+            String jsonStr = success.getData();
+            com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(jsonStr, com.laowang.logindemo.apientity.Result.class);
+            if (fromJson.getData() == null) {
+                return new Result.Error("Fail to change password.", R.string.result_fail_change_pwd);
+            }
+            LinkedTreeMap treeMap = (LinkedTreeMap) (fromJson.getData());
+            managedUser = new ManagedUser(treeMap.get("username").toString(), treeMap.get("password").toString(), treeMap.get("level").toString());
+            managedUser.setDate(treeMap.get("date").toString());
+            return new Result.Success<ManagedUser>(managedUser, "Change password successfully!", R.string.result_success_change_pwd);
+        } else if (result[0] instanceof Result.Error) {
+            return (Result.Error) result[0];
+        } else {
+            return (Result.Problem) result[0];
+        }
+    }
 }

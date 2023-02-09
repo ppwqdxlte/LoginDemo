@@ -62,7 +62,7 @@
     <string name="result_fail_modify_user">Failed to modify user. </string>
     <string name="result_success_delete_user">Successfully deleted user!</string>
     <string name="result_fail_delete_user">Failed to delete user. </string>
-    <string name="result_success_change_pwd">Successfully deleted user!</string>
+    <string name="result_success_change_pwd">Successfully changed password!</string>
     <string name="result_fail_change_pwd">Failed to delete user. </string>
     <string name="err_select_user">Please select a user from above.</string>
 </resources>
