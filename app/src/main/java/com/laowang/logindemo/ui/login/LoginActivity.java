@@ -24,8 +24,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.laowang.logindemo.Main0Activity;
 import com.laowang.logindemo.MainActivity;
 import com.laowang.logindemo.R;
+import com.laowang.logindemo.data.LoginDataSource;
+import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.databinding.ActivityLoginBinding;
 import com.laowang.logindemo.databinding.ActivityMainBinding;
 import com.laowang.logindemo.ui.login.LoginViewModel;
@@ -84,8 +87,14 @@ public class LoginActivity extends AppCompatActivity {
                     // Complete and destroy login activity once successful，登录成功就销毁登陆页面
                     finish(); // this.finish()调用基类的隐藏方法，从安卓手机后台还能调出来，假的销毁
                     // 打开主页 【注意】只有在AndroidManifest.xml中声明过的Activity才能被拿来使用
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    /* 根据当前用户权限显示不同的导航项，试过代码修改，由于没找到简单方法，故而最笨的方法，一个权限对应一套页面。。。 */
+                    if (LoginRepository.getInstance(new LoginDataSource()).getUser().getLevel().contains("1")){
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Intent intent = new Intent(LoginActivity.this, Main0Activity.class);
+                        startActivity(intent);
+                    }
                 }
                 setResult(Activity.RESULT_OK);
             }

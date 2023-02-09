@@ -39,6 +39,11 @@
             android:exported="true"
             android:label="@string/app_name">
         </activity>
+        <!-- app主页 main activity -->
+        <activity android:name=".Main0Activity"
+            android:exported="true"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

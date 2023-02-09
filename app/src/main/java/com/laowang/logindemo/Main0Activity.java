@@ -1,16 +1,10 @@
 package com.laowang.logindemo;
 
-import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.XmlRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -28,9 +22,9 @@ import com.laowang.logindemo.ui.login.LoginActivity;
 import com.laowang.logindemo.util.ResourceProvider;
 
 /**
- * 【管理员】左侧导航的主页
+ * 【普通用户】左侧导航的主页
  */
-public class MainActivity extends AppCompatActivity {
+public class Main0Activity extends AppCompatActivity {
     /**
      * AppBar配置 ？？？
      */
@@ -38,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 页面捆绑
      */
-    private ActivityMainBinding binding;
+    private ActivityMain0Binding binding0;
 
     private final LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
     /**
@@ -49,26 +43,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /* 充气（不管哪种Activity，必须充气） */
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        /* 设置顶部条（可选） */
-        setSupportActionBar(binding.appBarMain.toolbar);
-        /* 漂浮动作按钮，添加单击监听器 */
-        binding.appBarMain.fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        binding0 = ActivityMain0Binding.inflate(getLayoutInflater());
+        setContentView(binding0.getRoot());
+        setSupportActionBar(binding0.appBarMain0.toolbar);
+        binding0.appBarMain0.fab0.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
-        /* 配置AppBar(吸顶条) */
-        DrawerLayout drawer = binding.drawerLayout; // 根布局，本质就是一个部件，（每个页面可能不一样，此页面是抽屉布局）
+        DrawerLayout drawer0 = binding0.drawerLayout0;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_management, R.id.nav_token_browser,R.id.nav_token_import)
-                .setOpenableLayout(drawer)
+                R.id.nav_home,R.id.nav_management,R.id.nav_token_browser)
+                .setOpenableLayout(drawer0)
                 .build();
-        /* 导航UI设置actionBar(动作交互条) 导航控制器(content_main，host-fragment包含了4个子片段 */
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        /* 导航UI配置 控制器，（左侧导航视图+控制器） */
-        NavigationView navigationView = binding.navView;
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavController navController0 = Navigation.findNavController(this,R.id.nav_host_fragment_content_main0);
+        NavigationUI.setupActionBarWithNavController(this,navController0,mAppBarConfiguration);
+        NavigationView navigationView0 = binding0.navView0;
+        NavigationUI.setupWithNavController(navigationView0,navController0);
     }
 
     /**
@@ -101,15 +89,15 @@ public class MainActivity extends AppCompatActivity {
 //        Log.i("item title", item.getTitle().toString());  // Log out
         if (item.getTitle() != null && item.getTitle().toString().equals(ResourceProvider.getString(R.string.log_out))) { // 先判断选中项是否为Log out
             LoginRepository loginRepository = LoginRepository.getInstance(new LoginDataSource());
-            loginRepository.logout(MainActivity.this, LoginActivity.class);
+            loginRepository.logout(Main0Activity.this, LoginActivity.class);
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+        NavController navController0 = Navigation.findNavController(this, R.id.nav_host_fragment_content_main0);
+        return NavigationUI.navigateUp(navController0, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 }
