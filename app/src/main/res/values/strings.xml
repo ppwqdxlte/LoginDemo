@@ -66,4 +66,20 @@
     <string name="result_success_change_pwd">Successfully changed password!</string>
     <string name="result_fail_change_pwd">Failed to delete user. </string>
     <string name="err_select_user">Please select a user from above.</string>
+    <!-- token -->
+    <string name="ui_type_TCC">TCC</string>
+    <string name="ui_type_KCT">KCT</string>
+    <string name="ui_hint_meter_number">Please input token-string.</string>
+    <string name="ui_btn_query">QUERY</string>
+    <string name="ui_btn_export_excel">EXPORT</string>
+    <string name="ui_hint_file_selector">Click to select a local excel file.</string>
+    <string name="ui_btn_import_file">SAVE</string>
+    <string name="ui_link_query_format">Query Format</string>
+    <string name="ui_link_import_format">Import Format</string>
+    <string name="ui_tb_head_meter_num">Meter Number</string>
+    <string name="ui_tb_head_token">Token</string>
+    <string name="ui_tb_title">TOKEN LIST</string>
+    <string name="ui_toast_query_format">When Multi Meter Query is selected,\nFormat is XXXXXXXXXXXXX,XXXXXXXXXXXXX,XXXXXXXXXXXXX\nWhen Range Query is selected,\nFormat is XXXXXXXXXXXXX-XXXXXXXXXXXXX</string>
+    <string name="ui_toast_txt_import_format">The import format is shown on the left\nThere are 2 columns in total, one is the meter number\nand the other is token
+</string>
 </resources>
