@@ -21,4 +21,8 @@ public class ApiUrl {
      * API后缀 新增用户
      */
     public static final String API_CREATE_USER = "/createUser";
+    /**
+     * API后缀 删除用户
+     */
+    public static final String API_DELETE_USER = "/deleteUser";
 }
