@@ -146,7 +146,7 @@ public class PageViewModel extends ViewModel {
         // 设置 create 结果消息提示
         if (result instanceof Result.Success) {
             ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
-            UserMngResult userMngResult = new UserMngResult(data,R.string.result_success_create_user);
+            UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_create_user);
             mUserMngResult.setValue(userMngResult);
         } else {
             // 添加失败提示
@@ -156,14 +156,34 @@ public class PageViewModel extends ViewModel {
     }
 
     public void modifyUser(MngViewModel mngViewModel, String selectedName, String oldPwd, String newPwd, String repeatPwd) {
-        // TODO modify user
+        // 提交时表单验证+预设结果
+        Integer resultCode = null;
+        if ((resultCode = (isSelectednameMeet(selectedName))) != 1
+                || (resultCode = (isOldpwdMeet(mngViewModel, oldPwd, selectedName))) != 1
+                || (resultCode = (isNewpwdMeet(newPwd))) != 1
+                || (resultCode = (isRepeatpwdMeet(newPwd, repeatPwd))) != 1) {
+            UserMngResult userMngResult = new UserMngResult(resultCode);
+            mUserMngResult.setValue(userMngResult);
+            return;
+        }
+        Result<ManagedUser> result = mngViewModel.getDataSource().getValue().modifyUser(selectedName, oldPwd, newPwd, repeatPwd);
+        // 设置 modify 结果消息提示
+        if (result instanceof Result.Success) {
+            ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+            UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_modify_user);
+            mUserMngResult.setValue(userMngResult);
+        } else {
+            // 修改失败提示
+            UserMngResult userMngResult = new UserMngResult(R.string.result_fail_modify_user);
+            mUserMngResult.setValue(userMngResult);
+        }
     }
 
     public void changePassword(String newPwd, String repeatPwd) {
         // TODO change password
     }
 
-    public void deleteUser(MngViewModel mngViewModel,String selectedName) {
+    public void deleteUser(MngViewModel mngViewModel, String selectedName) {
         // 提交时表单验证+预设结果
         Integer resultCode = null;
         if ((resultCode = (isSelectednameMeet(selectedName))) != 1) {
@@ -175,7 +195,7 @@ public class PageViewModel extends ViewModel {
         // 设置 delete 结果消息提示
         if (result instanceof Result.Success) {
             ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
-            UserMngResult userMngResult = new UserMngResult(data,R.string.result_success_delete_user);
+            UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_delete_user);
             mUserMngResult.setValue(userMngResult);
         } else {
             // 删除失败提示
