@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.token.TokenReadFragment">
-
+    <!-- default text show in fragment -->
     <TextView
         android:id="@+id/text_token_read"
         android:layout_width="match_parent"
@@ -15,8 +15,109 @@
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <!-- token type -->
+    <RadioGroup
+        android:id="@+id/rg_token_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/fragment_vertical_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginVertical="@dimen/activity_vertical_margin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_meter_string">
+        <RadioButton
+            android:id="@+id/rb_tcc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_type_TCC" />
+        <RadioButton
+            android:id="@+id/rb_kct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ui_type_KCT" />
+    </RadioGroup>
+    <!-- 表号字符串 -->
+    <EditText
+        android:id="@+id/edit_meter_string"
+        android:layout_width="155dp"
+        android:layout_height="110dp"
+        android:background="@color/tab_card_background"
+        android:hint="@string/ui_hint_meter_number"
+        android:autofillHints="@string/ui_hint_meter_number"
+        android:layout_marginStart="@dimen/fragment_horizontal_margin"
+        app:layout_constraintStart_toEndOf="@+id/rg_token_type"
+        app:layout_constraintTop_toTopOf="@+id/rg_token_type" />
+    <!-- Query btn -->
+    <Button
+        android:id="@+id/btn_query"
+        android:layout_width="80sp"
+        android:layout_height="wrap_content"
+        android:text="@string/ui_btn_query"
+        android:textSize="@dimen/btn_txt_size"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/fragment_vertical_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/edit_meter_string" />
+    <Button
+        android:id="@+id/btn_export"
+        android:layout_width="80sp"
+        android:layout_height="wrap_content"
+        android:text="@string/ui_btn_export_excel"
+        android:textSize="@dimen/btn_txt_size"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_query"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_meter_string"/>
+    <!-- 分隔线 -->
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/line_divider_token"
+        android:layout_width="match_parent"
+        android:layout_height="2pt"
+        android:layout_marginTop="@dimen/fragment_vertical_margin"
+        app:dividerColor="@color/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@+id/edit_meter_string"/>
+    <TextView
+        android:id="@+id/token_list_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fragment_vertical_margin"
+        app:layout_constraintTop_toBottomOf="@id/line_divider_token"
+        android:textSize="@dimen/title_size"
+        android:textAlignment="center"
+        android:text="@string/ui_tb_title"/>
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/line_divider_tb"
+        android:layout_width="match_parent"
+        android:layout_height="1pt"
+        android:layout_marginTop="@dimen/fragment_vertical_margin"
+        app:dividerColor="@color/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@id/token_list_title"/>
+    <!-- 滚动视图 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="180dp"
+        app:layout_constraintTop_toTopOf="parent" >
+        <!-- token列表 -->
+        <TableLayout
+            android:id="@+id/tb_token_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <!-- 动态生成table rows -->
+            <TableRow>
+                <TextView android:text="Meter Number"
+                    android:layout_width="115sp"/>
+                <TextView android:text="Token"
+                    android:layout_width="wrap_content"/>
+            </TableRow>
+            <TableRow>
+                <TextView android:text="8888888888888" />
+                <TextView android:text="9999 9999 9999 9999 9999" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
