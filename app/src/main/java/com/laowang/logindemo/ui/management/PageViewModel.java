@@ -124,7 +124,7 @@ public class PageViewModel extends ViewModel {
         if (selectedName == null || selectedName.equals("")) {
             return R.string.err_select_user;
         }
-        if (!mngViewModel.getmManagedUsers().getValue().get(selectedName).getPassword().equals(oldPwd)) {
+        if (mngViewModel.getmManagedUsers().getValue().get(selectedName) == null || !mngViewModel.getmManagedUsers().getValue().get(selectedName).getPassword().equals(oldPwd)) {
             return R.string.err_pwd_old;
         }
         return 1;

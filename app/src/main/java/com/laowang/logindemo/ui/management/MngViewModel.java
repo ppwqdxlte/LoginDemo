@@ -44,6 +44,10 @@ public class MngViewModel extends ViewModel {
      * 为了修改密码所添加
      */
     private final MutableLiveData<Map<String, ManagedUser>> mManagedUsers;
+    /**
+     * 为了双向绑定 选定用户名，为了修改用户和删除用户使用
+     */
+    private final MutableLiveData<String> mSelectedName;
 
     public MngViewModel() {
         /* Log.e("管理视图模型","创建了"+count.incrementAndGet()+"次。"); 始终 只有 1 次，说明页面生命周期中视图模型对象只会创建一次，
@@ -56,6 +60,7 @@ public class MngViewModel extends ViewModel {
         mTableRows.setValue(new HashMap<>()); // 避免空指针异常
         mManagedUsers = new MutableLiveData<>();
         mManagedUsers.setValue(new HashMap<>());
+        mSelectedName = new MutableLiveData<>();
     }
 
     public LiveData<String> getText() {
@@ -66,12 +71,20 @@ public class MngViewModel extends ViewModel {
         return mTableRows;
     }
 
-    public MutableLiveData<Map<String, ManagedUser>> getmManagedUsers() {
+    public LiveData<Map<String, ManagedUser>> getmManagedUsers() {
         return mManagedUsers;
     }
 
     public LiveData<MngDataSource> getDataSource() {
         return dataSource;
+    }
+
+    public LiveData<String> getmSelectedName() {
+        return mSelectedName;
+    }
+
+    public void setmSelectedName(String value) {
+        this.mSelectedName.setValue(value);
     }
 
     /**
@@ -95,8 +108,8 @@ public class MngViewModel extends ViewModel {
             if (!mTableRows.getValue().containsKey(loggedInUser.getDisplayName())) { // 尚不包含
                 TableRow tableRow = addUserInfoInRow(context, loggedInUser, 1);
                 mTableRows.getValue().put(loggedInUser.getDisplayName(), tableRow);
-                ManagedUser mngUser = new ManagedUser(loggedInUser.getDisplayName(),loggedInUser.getPassword());
-                mManagedUsers.getValue().put(mngUser.getUsername(),mngUser);
+                ManagedUser mngUser = new ManagedUser(loggedInUser.getDisplayName(), loggedInUser.getPassword());
+                mManagedUsers.getValue().put(mngUser.getUsername(), mngUser);
             }
         }
     }

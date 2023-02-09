@@ -1,6 +1,7 @@
 package com.laowang.logindemo.ui.management;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +22,15 @@ public class MngFragment extends Fragment {
 //    private static AtomicInteger count = new AtomicInteger(0);
     private FragmentManagementBinding binding;
 
+    private MngViewModel viewModel;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 //        Log.e("管理页面","创建了"+count.incrementAndGet()+"次"); // 每次从其它页面切换到这个页面都会重新创建一次
         // 初始化 ResourceProvider 的上下文，注意，必须要在ManagementViewModel构造方法之前执行
         ResourceProvider.setmCtx(getContext());
         // 初始化 ManagementViewModel对象
-        MngViewModel viewModel =
-                new ViewModelProvider(this).get(MngViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MngViewModel.class);
         /* 充气 */
         binding = FragmentManagementBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -69,7 +71,9 @@ public class MngFragment extends Fragment {
         TabLayout tabs = binding.tabsManagement;
         /*　【前端】绑【前端】UI视图适配器从逻辑层面绑定到UI选项卡布局。【细节】XML中TabLayout和ViewPager是分开的，结构上并不包含　*/
         tabs.setupWithViewPager(viewPager);
-
+        /* TableLayout每一项绑定单击事件，单击 table-row（除了表头），用户名显示在selectedName文本区内 */
+        userList.setClickable(true);
+        listenTablerowClicked();
         return root;
     }
 
@@ -78,5 +82,24 @@ public class MngFragment extends Fragment {
         super.onDestroyView();
         binding = null;
 //        getViewModelStore().clear(); 感觉没必要清空，因为页面还要用到该对象
+    }
+
+    /**
+     * 监听用户列表的单击事件
+     */
+    private void listenTablerowClicked() {
+        for (TableRow row : viewModel.getTableRows().getValue().values()) {
+            if (!((TextView) row.getChildAt(0)).getText().toString().toLowerCase().contains("sn")) {
+                // 先清空
+                row.setOnClickListener(null);
+                row.setClickable(true);
+                // 再创建
+                row.setOnClickListener(v -> {
+                    // 我直接在这里改状态行不？不调用控件了行不？让控件跟随 状态变化行不？？？Multable<String> selectedName...
+                    String selectedName = ((TextView) row.getChildAt(1)).getText().toString();
+                    viewModel.setmSelectedName(selectedName);
+                });
+            }
+        }
     }
 }
