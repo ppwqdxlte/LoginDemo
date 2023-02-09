@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class TokenReadViewModel extends ViewModel {
+public class TokenImportViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public TokenReadViewModel() {
+    public TokenImportViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is token-read fragment");
+        mText.setValue("This is token-import fragment.");
     }
 
     public LiveData<String> getText() {

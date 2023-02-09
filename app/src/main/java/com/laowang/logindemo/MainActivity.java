@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         /* 配置AppBar(吸顶条) */
         DrawerLayout drawer = binding.drawerLayout; // 根布局，本质就是一个部件，（每个页面可能不一样，此页面是抽屉布局）
         mAppBarConfiguration = new AppBarConfiguration.Builder( //？？？将每个菜单ID作为一组ID传递，因为每个菜单都应被视为顶级目的地
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_management, R.id.nav_token_browser,R.id.nav_token_import)
                 .setOpenableLayout(drawer)
                 .build();
         /* 导航UI设置actionBar(动作交互条) 导航控制器(content_main，host-fragment包含了3个子片段 */

@@ -16,16 +16,16 @@ public class TokenReadFragment extends Fragment {
 
     private FragmentTokenreadBinding binding;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        TokenReadViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(TokenReadViewModel.class);
+        TokenReadViewModel tokenReadViewModel = new ViewModelProvider(this).get(TokenReadViewModel.class);
 
         binding = FragmentTokenreadBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textTokenRead;
+        tokenReadViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
