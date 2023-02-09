@@ -12,14 +12,20 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_management"
         android:name="com.laowang.logindemo.ui.management.MngFragment"
         android:label="@string/menu_management"
         tools:layout="@layout/fragment_management" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_token_browser"
         android:name="com.laowang.logindemo.ui.token.TokenReadFragment"
         android:label="@string/menu_token_reading"
         tools:layout="@layout/fragment_tokenread" />
+
+    <fragment
+        android:id="@+id/nav_token_import"
+        android:name="com.laowang.logindemo.ui.token.TokenImportFragment"
+        android:label="@string/menu_token_import"
+        tools:layout="@layout/fragment_tokenimport" />
 </navigation>
