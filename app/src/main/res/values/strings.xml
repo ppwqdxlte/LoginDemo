@@ -82,4 +82,10 @@
     <string name="ui_toast_query_format">When Multi Meter Query is selected,\nFormat is XXXXXXXXXXXXX,XXXXXXXXXXXXX,XXXXXXXXXXXXX\nWhen Range Query is selected,\nFormat is XXXXXXXXXXXXX-XXXXXXXXXXXXX</string>
     <string name="ui_toast_txt_import_format">The import format is shown on the left\nThere are 2 columns in total, one is the meter number\nand the other is token
 </string>
+    <string name="result_success_kct_meter_str">Successfully queried KCT-tokens</string>
+    <string name="result_fail_kct_meter_str">No KCT tokens of this meter-string.</string>
+    <string name="result_success_tcc_meter_str">Successfully queried TCC-tokens.</string>
+    <string name="result_fail_tcc_meter_str">No TCC tokens of this meter-string.</string>
+    <string name="result_fail_blank_meter_str">TokenString cannot be empty.</string>
+    <string name="result_fail_blank_type">Please select a token type.</string>
 </resources>

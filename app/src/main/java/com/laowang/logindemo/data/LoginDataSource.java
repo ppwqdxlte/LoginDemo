@@ -22,7 +22,7 @@ public class LoginDataSource {
     /**
      * REST接口通用访问工具
      */
-    private RestfulApiHandler restfulApiHandler = new RestfulApiHandler();
+    private RestfulApiHandler apiHandler = new RestfulApiHandler();
     /**
      * 登录方法的源头
      *
@@ -37,7 +37,7 @@ public class LoginDataSource {
             Map<String, String> params = new HashMap<>();
             params.put("username", username);
             params.put("password", password);
-            Result<String>[] result = restfulApiHandler.postSync(null, strUrl, params);
+            Result<String>[] result = apiHandler.postSync(null, strUrl, params);
             // 直到result[0]不为空退出循环执行后面方法
             while (result[0] == null) {
             }

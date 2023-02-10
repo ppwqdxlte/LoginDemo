@@ -25,4 +25,8 @@ public class ApiUrl {
      * API后缀 删除用户
      */
     public static final String API_DELETE_USER = "/deleteUser";
+    /**
+     * API后缀 通过Token类型和表号查询tokens
+     */
+    public static final String API_TYPE_METER = "/queryTokenListbyMeterStr";
 }
