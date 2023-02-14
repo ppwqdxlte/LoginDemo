@@ -12,9 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.laowang.logindemo.databinding.FragmentTokenimportBinding;
 
-/**
- * TokenImportFragment
- */
 public class TokenImportFragment extends Fragment {
 
     private FragmentTokenimportBinding binding;

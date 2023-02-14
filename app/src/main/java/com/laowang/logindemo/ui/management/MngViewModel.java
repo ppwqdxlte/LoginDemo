@@ -18,40 +18,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 视图模型应该处理数据有关，management页面肯定不止文字啦！还有 grid列表，底部tab页签，每个tab页还要包含 输入框 和 按钮！！
- * 【NOTE】ViewModel 将数据保留在内存中，这意味着开销要低于从磁盘或网络检索数据。
- * ViewModel 与一个 Activity（或其他某个生命周期所有者）相关联，在配置更改期间保留在内存中，
- * 系统会自动将 ViewModel 与发生配置更改后产生的新 Activity 实例相关联。
- * <p>
- * 【数据倒灌】现象 eg.
- * https://blog.csdn.net/weixin_39798626/article/details/112291113
- * https://blog.csdn.net/Jason_Lee155/article/details/119966408?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-119966408-blog-112291113.pc_relevant_3mothn_strategy_recovery&spm=1001.2101.3001.4242.1&utm_relevant_index=3
- */
 public class MngViewModel extends ViewModel {
-    //    private static AtomicInteger count = new AtomicInteger(0);
-    /* 调用LoginRepository保存当前用户的状态 */
+
     private final LiveData<LoginRepository> loginRepository;
-    /* 数据源 */
+
     private final LiveData<MngDataSource> dataSource;
-    // 旧代码
+
     private final MutableLiveData<String> mText;
-    /**
-     * 用户列表
-     */
+
     private final MutableLiveData<Map<String, TableRow>> mTableRows;
-    /**
-     * 为了修改密码所添加
-     */
+
     private final MutableLiveData<Map<String, ManagedUser>> mManagedUsers;
-    /**
-     * 为了双向绑定 选定用户名，为了修改用户和删除用户使用
-     */
+
     private final MutableLiveData<String> mSelectedName;
 
     public MngViewModel() {
-        /* Log.e("管理视图模型","创建了"+count.incrementAndGet()+"次。"); 始终 只有 1 次，说明页面生命周期中视图模型对象只会创建一次，
-        如果只在构造方法获得数据，那么app运行期间都不会得到刷新！所以比如列表的获取，应该在 activity中查询，每次进入页面都会得到刷新！！！ */
         loginRepository = new MutableLiveData<>(LoginRepository.getInstance(new LoginDataSource()));
         dataSource = new MutableLiveData<>(new MngDataSource());
         mText = new MutableLiveData<>();
@@ -87,13 +68,9 @@ public class MngViewModel extends ViewModel {
         this.mSelectedName.setValue(value);
     }
 
-    /**
-     * 用户权限1就查询所有用户，权限level==0则只放自己的信息
-     */
     public void updateUserList(Context context) {
         LoggedInUser loggedInUser = loginRepository.getValue().getUser();
         if (loggedInUser.getLevel().contains("1")) {
-            //先清空
             mTableRows.getValue().clear();
             mManagedUsers.getValue().clear();
             List<LoggedInUser> users = dataSource.getValue().queryUserList();

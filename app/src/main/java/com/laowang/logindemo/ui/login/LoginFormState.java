@@ -2,9 +2,6 @@ package com.laowang.logindemo.ui.login;
 
 import androidx.annotation.Nullable;
 
-/**
- * Data validation state of the login form. 登录表单的合法性状态
- */
 class LoginFormState {
     @Nullable
     private Integer usernameError;

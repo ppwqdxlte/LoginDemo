@@ -2,14 +2,8 @@ package com.laowang.logindemo.data;
 
 import java.io.Serializable;
 
-/**
- * A generic class that holds a result success w/ data or an error exception.
- * 不需要序列化版本UID因为安卓app不用保存result。。
- */
 public class Result<T> {
 
-    //    private static final Long serialVersionUID = 1L;
-    // hide the private constructor to limit subclass types (Success, Error)
     private Result() {
     }
 
@@ -34,7 +28,6 @@ public class Result<T> {
         return "";
     }
 
-    // Success sub-class
     public final static class Success<T> extends Result {
         private T data;
         private String msg;
@@ -68,7 +61,6 @@ public class Result<T> {
         }
     }
 
-    // Error sub-class
     public final static class Error extends Result {
         private Exception error;
         private String msg;
@@ -107,7 +99,6 @@ public class Result<T> {
         }
     }
 
-    // Problem sub-class eg.problem response rather than an exception
     public final static class Problem<T> extends Result {
         private T data;
         private String msg;

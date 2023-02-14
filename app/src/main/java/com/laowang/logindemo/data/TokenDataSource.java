@@ -29,16 +29,11 @@ public class TokenDataSource<T> {
         if (result[0] instanceof Result.Success) {
             Result.Success<String> success = (Result.Success<String>) result[0];
             String jsonStr = success.getData();
-            // 数据错误时也可能success，eg. {"data":null,"msg":null,"code":null,"throwable":null}
             com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(jsonStr, com.laowang.logindemo.apientity.Result.class);
-            // 需注意 空指针异常
             if (fromJson.getData() == null) {
                 return tokens;
             }
-            // LinkedTreeMap data = (LinkedTreeMap) fromJson.getData();
-            // 列表的话是List<LinkedTreeMap>类型
             List<LinkedTreeMap> data = (ArrayList<LinkedTreeMap>) fromJson.getData();
-            // batchNo, meterNo, token, date
             for (int i = 0; i < data.size(); i++) {
                 LinkedTreeMap treeMap = data.get(i);
                 BaseToken token = null;

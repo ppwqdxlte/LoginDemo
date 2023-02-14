@@ -31,9 +31,7 @@ public class TokenReadViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
     private MutableLiveData<TokenResult> mTokenResult = new MutableLiveData<>();
-    /**
-     * 表行，key-SN序号，TableRow 携带一条token数据
-     */
+
     private final MutableLiveData<Map<Integer, TableRow>> mTableRows;
 
     private final TokenRepository tokenRepository = TokenRepository.getInstance(new TokenDataSource());
@@ -63,13 +61,6 @@ public class TokenReadViewModel extends ViewModel {
         this.mTokenResult.setValue(tokenResult);
     }
 
-    /**
-     * 设置结果消息，更新 页面数据（更新UI显示是别的方法）
-     *
-     * @param context  上下文
-     * @param type     token 类型
-     * @param meterStr meter 字符串
-     */
     public void queryTokens(@NonNull Context context, @NonNull TokenType type, @NonNull String meterStr) {
         if (meterStr.trim().equals("")) {
             // 权限控制,普通用户不允许 表号为空，管理员表号空时候查询所有该类型的tokens
@@ -78,17 +69,13 @@ public class TokenReadViewModel extends ViewModel {
             }
         }
         // TODO 先从 tokenRepository 缓存中查询
-        // 成功不成功都得更新 table rows 数据
         TreeMap<Integer,TableRow> treeMap = new TreeMap<>();
-        // 添加表头
         treeMap.put(0,addTableHeadInfoInRow(context));
         if (type == TokenType.KCT) {
             Result<List<KCT>> listResult = tokenRepository.queryKctsByMeterStr(meterStr);
             if (listResult instanceof Result.Success) {
                 Result.Success<List<KCT>> result = (Result.Success<List<KCT>>) listResult;
-                // 设置结果
                 mTokenResult.setValue(new TokenResult(result.getCode(), null, null, null));
-                // 填充 tree map
                 List<KCT> data = result.getData();
                 for (int i = 0; i < data.size(); i++) {
                     int sn = i + 1;
@@ -115,18 +102,9 @@ public class TokenReadViewModel extends ViewModel {
                 mTokenResult.setValue(new TokenResult(null, null, null, result.getCode()));
             }
         }
-        // 重新设置，以便观察到变化后更新UI
         mTableRows.setValue(treeMap);
     }
 
-    /**
-     * 将token信息填充进 TableRow对象
-     *
-     * @param context      上下文
-     * @param token        token
-     * @param serialNumber 表中的序号
-     * @return Table Row
-     */
     private TableRow addTokenInfoInRow(Context context, BaseToken token, int serialNumber) {
         TableRow tokenRow = new TableRow(context);
         TextView sn = new TextView(context);
@@ -142,12 +120,6 @@ public class TokenReadViewModel extends ViewModel {
         return tokenRow;
     }
 
-    /**
-     * 将 表头 填充进 TableRow对象
-     *
-     * @param context      上下文
-     * @return Table Row
-     */
     private TableRow addTableHeadInfoInRow(Context context) {
         TableRow tokenRow = new TableRow(context);
         TextView sn = new TextView(context);

@@ -3,14 +3,10 @@ package com.laowang.logindemo.ui.token;
 import androidx.annotation.Nullable;
 
 public class TokenResult {
-    /**
-     * 不分token类型的成功码
-     */
+
     @Nullable
     private Integer successCode;
-    /**
-     * 不分token类型的错误码
-     */
+
     @Nullable
     private Integer errorCode;
     @Nullable
