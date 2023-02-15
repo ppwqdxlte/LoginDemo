@@ -27,6 +27,7 @@ public class TokenReadFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        TokenReadViewModel.fragment = this;
         TokenReadViewModel tokenReadViewModel = new ViewModelProvider(this).get(TokenReadViewModel.class);
 
         binding = FragmentTokenreadBinding.inflate(inflater, container, false);
