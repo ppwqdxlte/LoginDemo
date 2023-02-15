@@ -100,7 +100,6 @@ public class RestfulApiHandler {
     }
 
     public void postAsync(MyViewModel myViewModel, String url, Map<String, String> params) {
-//        final Result<String>[] result = new Result[]{null};
         FormBody.Builder builder = new FormBody.Builder();
         for (String s : params.keySet()) {
             builder.add(s, params.get(s));
