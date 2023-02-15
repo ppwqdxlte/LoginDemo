@@ -21,7 +21,8 @@
     <!-- nav items and appBar text -->
     <string name="menu_home">Home</string>
     <string name="menu_management">Management</string>
-    <string name="menu_token_reading">TokenReading</string>
+    <string name="menu_token_reading">Browse Token</string>
+    <string name="menu_token_import">Import Token</string>
     <!-- home fragment -->
     <string name="default_home_text">The main function of this software is to simply manage token.\n1.Login account is divided into main account and ordinary account (account authority is fixed).\n2.You can import and save all kinds of token,The specific operation is in the \'Excel Import\' interface.\n3.You can view the imported token according to the conditions,The specific ration is in the \'Query\' interface.</string>
     <!-- management fragment -->
@@ -65,4 +66,26 @@
     <string name="result_success_change_pwd">Successfully changed password!</string>
     <string name="result_fail_change_pwd">Failed to delete user. </string>
     <string name="err_select_user">Please select a user from above.</string>
+    <!-- token -->
+    <string name="ui_type_TCC">TCC</string>
+    <string name="ui_type_KCT">KCT</string>
+    <string name="ui_hint_meter_number">Please input token-string.</string>
+    <string name="ui_btn_query">QUERY</string>
+    <string name="ui_btn_export_excel">EXPORT</string>
+    <string name="ui_hint_file_selector">Click to select a local excel file.</string>
+    <string name="ui_btn_import_file">SAVE</string>
+    <string name="ui_link_query_format">Query Format</string>
+    <string name="ui_link_import_format">Import Format</string>
+    <string name="ui_tb_head_meter_num">Meter Number</string>
+    <string name="ui_tb_head_token">Token</string>
+    <string name="ui_tb_title">TOKEN LIST</string>
+    <string name="ui_toast_query_format">When Multi Meter Query is selected,\nFormat is XXXXXXXXXXXXX,XXXXXXXXXXXXX,XXXXXXXXXXXXX\nWhen Range Query is selected,\nFormat is XXXXXXXXXXXXX-XXXXXXXXXXXXX</string>
+    <string name="ui_toast_txt_import_format">The import format is shown on the left\nThere are 2 columns in total, one is the meter number\nand the other is token
+</string>
+    <string name="result_success_kct_meter_str">Successfully queried KCT-tokens</string>
+    <string name="result_fail_kct_meter_str">No KCT tokens of this meter-string.</string>
+    <string name="result_success_tcc_meter_str">Successfully queried TCC-tokens.</string>
+    <string name="result_fail_tcc_meter_str">No TCC tokens of this meter-string.</string>
+    <string name="result_fail_blank_meter_str">TokenString cannot be empty.</string>
+    <string name="result_fail_blank_type">Please select a token type.</string>
 </resources>

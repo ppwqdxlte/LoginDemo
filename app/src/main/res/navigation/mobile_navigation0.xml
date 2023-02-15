@@ -22,10 +22,4 @@
         android:name="com.laowang.logindemo.ui.token.TokenReadFragment"
         android:label="@string/menu_token_reading"
         tools:layout="@layout/fragment_tokenread" />
-
-    <fragment
-        android:id="@+id/nav_token_import"
-        android:name="com.laowang.logindemo.ui.token.TokenImportFragment"
-        android:label="@string/menu_token_import"
-        tools:layout="@layout/fragment_tokenimport" />
 </navigation>

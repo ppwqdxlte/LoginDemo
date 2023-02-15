@@ -31,6 +31,12 @@ android {
     }
 }
 
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = "TokenReader.apk"
+    }
+}
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
