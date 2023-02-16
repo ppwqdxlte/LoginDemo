@@ -206,13 +206,13 @@ public class TabFragment extends Fragment {
                 Toast.makeText(getActivity(), successCode, Toast.LENGTH_SHORT).show();
                 // 刷新 user list
                 Map<String, TableRow> oldMap = mngViewModel.getTableRows().getValue();
-                Map<TableRow,String> reverseMap = new TreeMap<>((o1, o2) -> {
+                Map<TableRow, String> reverseMap = new TreeMap<>((o1, o2) -> {
                     TextView SN1 = (TextView) (o1.getChildAt(0));
                     TextView SN2 = (TextView) (o2.getChildAt(0));
                     int i = Integer.parseInt(SN1.getText().toString()) - Integer.parseInt(SN2.getText().toString());
-                    if (i < 0){
+                    if (i < 0) {
                         return 1;
-                    } else if (i > 0){
+                    } else if (i > 0) {
                         return -1;
                     } else {
                         return 0;
@@ -220,10 +220,10 @@ public class TabFragment extends Fragment {
                 });
                 Map<String, TableRow> newCopy = new HashMap<>();
                 for (String s : oldMap.keySet()) {
-                    reverseMap.put(oldMap.get(s),s);
+                    reverseMap.put(oldMap.get(s), s);
                 }
                 for (TableRow tableRow : reverseMap.keySet()) {
-                    newCopy.put(reverseMap.get(tableRow),tableRow);
+                    newCopy.put(reverseMap.get(tableRow), tableRow);
                 }
                 mngViewModel.setmTableRows(newCopy);
             }
@@ -303,10 +303,10 @@ public class TabFragment extends Fragment {
             } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
                     && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
                 // 修改用户
-                pageViewModel.modifyUser(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
+                pageViewModel.modifyUser(mngViewModel, getContext(), selectedName, oldPwd, newPwd, repeatPwd);
             } else {                                                                        // change password
                 // 修改密码
-                pageViewModel.changePassword(mngViewModel, newPwd, repeatPwd);
+                pageViewModel.changePassword(mngViewModel, getContext(), newPwd, repeatPwd);
             }
         });
     }
@@ -316,7 +316,7 @@ public class TabFragment extends Fragment {
      */
     private void listenDeleteClicked() {
         // 删除监听器
-        binding.sectionBtnDelete.setOnClickListener(v -> pageViewModel.deleteUser(mngViewModel, binding.sectionUsernameSelected.getText().toString()));
+        binding.sectionBtnDelete.setOnClickListener(v -> pageViewModel.deleteUser(mngViewModel, getContext(), binding.sectionUsernameSelected.getText().toString()));
     }
 
     /**

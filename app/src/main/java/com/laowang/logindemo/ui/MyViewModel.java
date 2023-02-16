@@ -21,7 +21,10 @@ public class MyViewModel extends ViewModel {
     private MutableLiveData<Result<List<KCT>>> mKctResult;
     private MutableLiveData<Result<List<TCC>>> mTccResult;
 
-    private MutableLiveData<Result<ManagedUser>> mManagedResult;
+    private MutableLiveData<Result<ManagedUser>> mCreateResult;
+    private MutableLiveData<Result<ManagedUser>> mModifyResult;
+    private MutableLiveData<Result<ManagedUser>> mDeleteResult;
+    private MutableLiveData<Result<ManagedUser>> mChangeResult;
 
     public MyViewModel() {
         this.mResultString = new MutableLiveData<>();
@@ -29,7 +32,10 @@ public class MyViewModel extends ViewModel {
         this.mTccs = new MutableLiveData<>();
         this.mKctResult = new MutableLiveData<>();
         this.mTccResult = new MutableLiveData<>();
-        this.mManagedResult = new MutableLiveData<>();
+        this.mCreateResult = new MutableLiveData<>();
+        this.mModifyResult = new MutableLiveData<>();
+        this.mDeleteResult = new MutableLiveData<>();
+        this.mChangeResult = new MutableLiveData<>();
     }
 
     public void setmResultString(Result<String> result) {
@@ -73,11 +79,35 @@ public class MyViewModel extends ViewModel {
         this.mTccResult.setValue(tccResult);
     }
 
-    public LiveData<Result<ManagedUser>> getmManagedResult() {
-        return mManagedResult;
+    public LiveData<Result<ManagedUser>> getmCreateResult() {
+        return mCreateResult;
     }
 
-    public void setmManagedResult(Result<ManagedUser> managedResult) {
-        this.mManagedResult.setValue(managedResult);
+    public void setmCreateResult(Result<ManagedUser> createResult) {
+        this.mCreateResult.setValue(createResult);
+    }
+
+    public LiveData<Result<ManagedUser>> getmModifyResult() {
+        return mModifyResult;
+    }
+
+    public void setmModifyResult(Result<ManagedUser> modifyResult) {
+        this.mModifyResult.setValue(modifyResult);
+    }
+
+    public LiveData<Result<ManagedUser>> getmDeleteResult() {
+        return mDeleteResult;
+    }
+
+    public void setmDeleteResult(Result<ManagedUser> deleteResult) {
+        this.mDeleteResult.setValue(deleteResult);
+    }
+
+    public LiveData<Result<ManagedUser>> getmChangeResult() {
+        return mChangeResult;
+    }
+
+    public void setmChangeResult(Result<ManagedUser> changeResult) {
+        this.mChangeResult.setValue(changeResult);
     }
 }

@@ -74,33 +74,79 @@ public class MngViewModel extends ViewModel {
         mManagedUsers.setValue(new HashMap<>());
         mSelectedName = new MutableLiveData<>();
         /* observe Result<ManagedUser> result*/
-        dataSource.getValue().getMyViewModel().getmManagedResult().observe(fragment.getViewLifecycleOwner(), new Observer<Result<ManagedUser>>() {
-            @Override
-            public void onChanged(Result<ManagedUser> result) {
-                if (result == null) return;
-                if (result instanceof Result.Success) {
-                    ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
-                    // mngViewModel tableRowMap 添加 user
-                    LoggedInUser rowUser = new LoggedInUser(UUID.randomUUID().toString(),
-                            data.getUsername(), data.getPassword(), data.getRoleCode(), data.getDate());
-                    TableRow row = MngViewModel.this.addUserInfoInRow(MngViewModel.this.context, rowUser, MngViewModel.this.getTableRows().getValue().size() + 1);
-                    MngViewModel.this.getTableRows().getValue().put(data.getUsername(), row);
-                    // 先清空
-                    row.setOnClickListener(null);
-                    row.setClickable(true);
-                    // 再创建
-                    row.setOnClickListener(v -> {
-                        // 我直接在这里改状态行不？不调用控件了行不？让控件跟随 状态变化行不？？？Multable<String> selectedName...
-                        String selectedName = ((TextView) row.getChildAt(1)).getText().toString();
-                        MngViewModel.this.setmSelectedName(selectedName);
-                    });
-                    UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_create_user);
-                    pageViewModel.setmUserMngResult(userMngResult);
-                } else {
-                    // 添加失败提示
-                    UserMngResult userMngResult = new UserMngResult(R.string.result_fail_create_user);
-                    pageViewModel.setmUserMngResult(userMngResult);
+        dataSource.getValue().getMyViewModel().getmCreateResult().observe(fragment.getViewLifecycleOwner(), result -> {
+            if (result == null) return;
+            if (result instanceof Result.Success) {
+                ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+                // mngViewModel tableRowMap managedUsers 添加 user
+                LoggedInUser rowUser = new LoggedInUser(UUID.randomUUID().toString(),
+                        data.getUsername(), data.getPassword(), data.getRoleCode(), data.getDate());
+                TableRow row = MngViewModel.this.addUserInfoInRow(MngViewModel.this.context, rowUser, MngViewModel.this.getTableRows().getValue().size() + 1);
+                MngViewModel.this.getTableRows().getValue().put(data.getUsername(), row);
+                MngViewModel.this.getmManagedUsers().getValue().put(data.getUsername(),data);
+                // 先清空
+                row.setOnClickListener(null);
+                row.setClickable(true);
+                // 再创建
+                row.setOnClickListener(v -> {
+                    // 我直接在这里改状态行不？不调用控件了行不？让控件跟随 状态变化行不？？？Multable<String> selectedName...
+                    String selectedName = ((TextView) row.getChildAt(1)).getText().toString();
+                    MngViewModel.this.setmSelectedName(selectedName);
+                });
+                UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_create_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            } else {
+                // 添加失败提示
+                UserMngResult userMngResult = new UserMngResult(R.string.result_fail_create_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            }
+        });
+        dataSource.getValue().getMyViewModel().getmModifyResult().observe(fragment.getViewLifecycleOwner(), result -> {
+            if (result == null) return;
+            // 设置 modify 结果消息提示
+            if (result instanceof Result.Success) {
+                ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+                UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_modify_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            } else {
+                // 修改失败提示
+                UserMngResult userMngResult = new UserMngResult(R.string.result_fail_modify_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            }
+        });
+        dataSource.getValue().getMyViewModel().getmDeleteResult().observe(fragment.getViewLifecycleOwner(), result -> {
+            if (result == null) return;
+            // 设置 delete 结果消息提示
+            if (result instanceof Result.Success) {
+                ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+                // mngViewModel tableRowMap 删除 user
+                Map<String, TableRow> map = MngViewModel.this.getTableRows().getValue();
+                map.remove(data.getUsername());
+                int sn = 1;
+                for (String key : map.keySet()) {
+                    TableRow tableRow = map.get(key);
+                    TextView SN = (TextView) (tableRow.getChildAt(0));
+                    SN.setText(sn+++"");
                 }
+                UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_delete_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            } else {
+                // 删除失败提示
+                UserMngResult userMngResult = new UserMngResult(R.string.result_fail_delete_user);
+                pageViewModel.setmUserMngResult(userMngResult);
+            }
+        });
+        dataSource.getValue().getMyViewModel().getmChangeResult().observe(fragment.getViewLifecycleOwner(), result -> {
+            if (result == null) return;
+            // 设置 change 结果消息提示
+            if (result instanceof Result.Success) {
+                ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+                UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_change_pwd);
+                pageViewModel.setmUserMngResult(userMngResult);
+            } else {
+                // 改密失败提示
+                UserMngResult userMngResult = new UserMngResult(R.string.result_fail_change_pwd);
+                pageViewModel.setmUserMngResult(userMngResult);
             }
         });
     }
