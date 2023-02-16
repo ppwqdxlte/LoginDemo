@@ -1,15 +1,10 @@
 package com.laowang.logindemo.data;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.LinkedTreeMap;
-import com.laowang.logindemo.data.model.BaseToken;
 import com.laowang.logindemo.data.model.KCT;
 import com.laowang.logindemo.data.model.TCC;
 import com.laowang.logindemo.data.model.TokenType;
@@ -25,7 +20,7 @@ public class TokenDataSource<T> {
 
     private RestfulApiHandler apiHandler = new RestfulApiHandler();
 
-    private MyViewModel myViewModel = new MyViewModel();
+    private MyViewModel myViewModel;
 
     public MyViewModel getMyViewModel() {
         return myViewModel;

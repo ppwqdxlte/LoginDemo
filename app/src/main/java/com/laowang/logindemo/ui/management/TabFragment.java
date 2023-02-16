@@ -25,6 +25,7 @@ import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.model.ManagedUser;
 import com.laowang.logindemo.databinding.FragmentManagementViewpagerBinding;
+import com.laowang.logindemo.ui.MyViewModel;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -48,6 +49,10 @@ public class TabFragment extends Fragment {
      * 因为调用太多次，所以干脆作为成员变量
      */
     private MngViewModel mngViewModel;
+    /**
+     * 通用的View Model，ViewModelProvider(不同生命周期拥有者)决定属于哪个页面
+     */
+    private MyViewModel myViewModel;
 
     /**
      * 获得选项卡片的实例并确定 页面索引index
@@ -74,6 +79,7 @@ public class TabFragment extends Fragment {
         mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
         /* 初始化 pageViewModel视图模型对象 */
         pageViewModel = new ViewModelProvider(getParentFragment()).get(PageViewModel.class);
+        myViewModel = new ViewModelProvider(getParentFragment()).get(MyViewModel.class);
         int index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);

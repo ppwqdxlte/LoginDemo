@@ -147,31 +147,10 @@ public class PageViewModel extends ViewModel {
             mUserMngResult.setValue(userMngResult);
             return;
         }
-        Result<ManagedUser> result = mngViewModel.getDataSource().getValue().createUser(newUsername, newPwd, checkedRadioButtonId);
-        // 设置 create 结果消息提示
-        if (result instanceof Result.Success) {
-            ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
-            // mngViewModel tableRowMap 添加 user
-            LoggedInUser rowUser = new LoggedInUser(UUID.randomUUID().toString(),
-                    data.getUsername(), data.getPassword(), data.getRoleCode(), data.getDate());
-            TableRow row = mngViewModel.addUserInfoInRow(context, rowUser, mngViewModel.getTableRows().getValue().size() + 1);
-            mngViewModel.getTableRows().getValue().put(data.getUsername(), row);
-            // 先清空
-            row.setOnClickListener(null);
-            row.setClickable(true);
-            // 再创建
-            row.setOnClickListener(v -> {
-                // 我直接在这里改状态行不？不调用控件了行不？让控件跟随 状态变化行不？？？Multable<String> selectedName...
-                String selectedName = ((TextView) row.getChildAt(1)).getText().toString();
-                mngViewModel.setmSelectedName(selectedName);
-            });
-            UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_create_user);
-            mUserMngResult.setValue(userMngResult);
-        } else {
-            // 添加失败提示
-            UserMngResult userMngResult = new UserMngResult(R.string.result_fail_create_user);
-            mUserMngResult.setValue(userMngResult);
-        }
+        mngViewModel.setContext(context);
+        mngViewModel.setPageViewModel(this);
+        mngViewModel.getDataSource().getValue().createUser(newUsername, newPwd, checkedRadioButtonId);
+        // 设置 create 结果消息提示，放入observe中
     }
 
     public void modifyUser(MngViewModel mngViewModel, String selectedName, String oldPwd, String newPwd, String repeatPwd) {
