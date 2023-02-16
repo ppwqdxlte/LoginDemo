@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,11 @@ import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.model.ManagedUser;
 import com.laowang.logindemo.databinding.FragmentManagementViewpagerBinding;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -192,6 +198,28 @@ public class TabFragment extends Fragment {
             if (userMngResult.getSuccessCode() != null) {
                 int successCode = userMngResult.getSuccessCode();
                 Toast.makeText(getActivity(), successCode, Toast.LENGTH_SHORT).show();
+                // 刷新 user list
+                Map<String, TableRow> oldMap = mngViewModel.getTableRows().getValue();
+                Map<TableRow,String> reverseMap = new TreeMap<>((o1, o2) -> {
+                    TextView SN1 = (TextView) (o1.getChildAt(0));
+                    TextView SN2 = (TextView) (o2.getChildAt(0));
+                    int i = Integer.parseInt(SN1.getText().toString()) - Integer.parseInt(SN2.getText().toString());
+                    if (i < 0){
+                        return 1;
+                    } else if (i > 0){
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                Map<String, TableRow> newCopy = new HashMap<>();
+                for (String s : oldMap.keySet()) {
+                    reverseMap.put(oldMap.get(s),s);
+                }
+                for (TableRow tableRow : reverseMap.keySet()) {
+                    newCopy.put(reverseMap.get(tableRow),tableRow);
+                }
+                mngViewModel.setmTableRows(newCopy);
             }
             // 清除结果状态，否则Toast每次刷新fragment都会显示一遍。
             pageViewModel.setmUserMngResult(null);
@@ -265,7 +293,7 @@ public class TabFragment extends Fragment {
             String selectedName = binding.sectionUsernameSelected.getText().toString();
             String oldPwd = binding.sectionPasswordOld.getText().toString();
             if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
-                pageViewModel.createUser(mngViewModel, newUsername, newPwd, repeatPwd, regular.isChecked() ? 0 : 1);
+                pageViewModel.createUser(mngViewModel, getContext(), newUsername, newPwd, repeatPwd, regular.isChecked() ? 0 : 1);
             } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
                     && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
                 // 修改用户

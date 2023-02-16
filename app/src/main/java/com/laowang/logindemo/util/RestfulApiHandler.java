@@ -112,7 +112,7 @@ public class RestfulApiHandler {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                myViewModel.setmResultString(new Result.Success<>(e));
+                myViewModel.setmResultString(new Result.Error(e));
             }
 
             @Override

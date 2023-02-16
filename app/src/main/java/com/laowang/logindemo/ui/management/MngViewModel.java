@@ -14,9 +14,11 @@ import com.laowang.logindemo.data.MngDataSource;
 import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.data.model.ManagedUser;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 视图模型应该处理数据有关，management页面肯定不止文字啦！还有 grid列表，底部tab页签，每个tab页还要包含 输入框 和 按钮！！
@@ -39,7 +41,7 @@ public class MngViewModel extends ViewModel {
     /**
      * 用户列表
      */
-    private final MutableLiveData<Map<String, TableRow>> mTableRows;
+    private MutableLiveData<Map<String, TableRow>> mTableRows;
     /**
      * 为了修改密码所添加
      */
@@ -71,6 +73,10 @@ public class MngViewModel extends ViewModel {
         return mTableRows;
     }
 
+    public void setmTableRows(Map<String, TableRow> tableRows) {
+        this.mTableRows.setValue(tableRows);
+    }
+
     public LiveData<Map<String, ManagedUser>> getmManagedUsers() {
         return mManagedUsers;
     }
@@ -92,6 +98,18 @@ public class MngViewModel extends ViewModel {
      */
     public void updateUserList(Context context) {
         LoggedInUser loggedInUser = loginRepository.getValue().getUser();
+        TreeMap<TableRow,String> reverseMap = new TreeMap<>((o1, o2) -> {
+            TextView SN1 = (TextView) (o1.getChildAt(0));
+            TextView SN2 = (TextView) (o2.getChildAt(0));
+            int i = Integer.parseInt(SN1.getText().toString()) - Integer.parseInt(SN2.getText().toString());
+            if (i<0){
+                return 1;
+            } else if (i > 0){
+                return -1;
+            } else {
+                return 0;
+            }
+        });
         if (loggedInUser.getLevel().contains("1")) {
             //先清空
             mTableRows.getValue().clear();
@@ -100,21 +118,26 @@ public class MngViewModel extends ViewModel {
             for (int i = 0; i < users.size(); i++) {
                 LoggedInUser user = users.get(i);
                 TableRow tableRow = addUserInfoInRow(context, user, i + 1);
-                mTableRows.getValue().put(user.getDisplayName(), tableRow);
+                reverseMap.put(tableRow,user.getDisplayName());
                 ManagedUser mngUser = new ManagedUser(user.getDisplayName(), user.getPassword());
                 mManagedUsers.getValue().put(mngUser.getUsername(), mngUser);
             }
         } else {
             if (!mTableRows.getValue().containsKey(loggedInUser.getDisplayName())) { // 尚不包含
                 TableRow tableRow = addUserInfoInRow(context, loggedInUser, 1);
-                mTableRows.getValue().put(loggedInUser.getDisplayName(), tableRow);
+                reverseMap.put(tableRow,loggedInUser.getDisplayName());
                 ManagedUser mngUser = new ManagedUser(loggedInUser.getDisplayName(), loggedInUser.getPassword());
                 mManagedUsers.getValue().put(mngUser.getUsername(), mngUser);
             }
         }
+        Map<String,TableRow> map = new HashMap<>();
+        for (TableRow tableRow : reverseMap.keySet()) {
+            map.put(reverseMap.get(tableRow),tableRow);
+        }
+        mTableRows.setValue(map);
     }
 
-    private TableRow addUserInfoInRow(Context context, LoggedInUser user, int serialnumber) {
+    public TableRow addUserInfoInRow(Context context, LoggedInUser user, int serialnumber) {
         TableRow userRow = new TableRow(context);
         TextView sn = new TextView(context);
         sn.setText(serialnumber + "");

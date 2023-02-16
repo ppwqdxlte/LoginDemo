@@ -1,7 +1,9 @@
 package com.laowang.logindemo.ui.management;
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,9 +14,12 @@ import com.laowang.logindemo.R;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.Result;
+import com.laowang.logindemo.data.model.LoggedInUser;
 import com.laowang.logindemo.data.model.ManagedUser;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Tab页签的页面区视图模型
@@ -132,7 +137,7 @@ public class PageViewModel extends ViewModel {
         return 1;
     }
 
-    public void createUser(MngViewModel mngViewModel, String newUsername, String newPwd, String repeatPwd, int checkedRadioButtonId) {
+    public void createUser(MngViewModel mngViewModel, Context context, String newUsername, String newPwd, String repeatPwd, int checkedRadioButtonId) {
         // 提交时表单验证+预设结果
         Integer resultCode = null;
         if ((resultCode = (isUsernameMeet(mngViewModel, newUsername))) != 1
@@ -146,6 +151,20 @@ public class PageViewModel extends ViewModel {
         // 设置 create 结果消息提示
         if (result instanceof Result.Success) {
             ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+            // mngViewModel tableRowMap 添加 user
+            LoggedInUser rowUser = new LoggedInUser(UUID.randomUUID().toString(),
+                    data.getUsername(), data.getPassword(), data.getRoleCode(), data.getDate());
+            TableRow row = mngViewModel.addUserInfoInRow(context, rowUser, mngViewModel.getTableRows().getValue().size() + 1);
+            mngViewModel.getTableRows().getValue().put(data.getUsername(), row);
+            // 先清空
+            row.setOnClickListener(null);
+            row.setClickable(true);
+            // 再创建
+            row.setOnClickListener(v -> {
+                // 我直接在这里改状态行不？不调用控件了行不？让控件跟随 状态变化行不？？？Multable<String> selectedName...
+                String selectedName = ((TextView) row.getChildAt(1)).getText().toString();
+                mngViewModel.setmSelectedName(selectedName);
+            });
             UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_create_user);
             mUserMngResult.setValue(userMngResult);
         } else {
@@ -217,6 +236,15 @@ public class PageViewModel extends ViewModel {
         // 设置 delete 结果消息提示
         if (result instanceof Result.Success) {
             ManagedUser data = ((Result.Success<ManagedUser>) result).getData();
+            // mngViewModel tableRowMap 删除 user
+            Map<String, TableRow> map = mngViewModel.getTableRows().getValue();
+            map.remove(data.getUsername());
+            int sn = 1;
+            for (String key : map.keySet()) {
+                TableRow tableRow = map.get(key);
+                TextView SN = (TextView) (tableRow.getChildAt(0));
+                SN.setText(sn+++"");
+            }
             UserMngResult userMngResult = new UserMngResult(data, R.string.result_success_delete_user);
             mUserMngResult.setValue(userMngResult);
         } else {
