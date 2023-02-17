@@ -20,13 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * 用户管理页的数据源.
- */
 public class MngDataSource {
-    /**
-     * REST接口通用访问工具
-     */
+
     private RestfulApiHandler restfulApiHandler = new RestfulApiHandler();
 
     public MyViewModel getMyViewModel() {
@@ -34,24 +29,18 @@ public class MngDataSource {
     }
 
     private MyViewModel myViewModel;
-    /**
-     * 1-create user
-     * 2-modify user
-     * 3-delete user
-     * 4-change password
-     */
+
     private Integer operationCode;
 
     public MngDataSource(Fragment fragment) {
         myViewModel = new ViewModelProvider(fragment).get(MyViewModel.class);
         myViewModel.getmResultString().observe(fragment.getViewLifecycleOwner(), stringResult -> {
             if (stringResult == null) return;
-            // 设置 Result<ManagedUser>
             if (stringResult instanceof Result.Success) {
                 Result.Success<String> success = (Result.Success<String>) stringResult;
                 String jsonStr = success.getData();
                 com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(jsonStr, com.laowang.logindemo.apientity.Result.class);
-                if (operationCode == 1) { // create user
+                if (operationCode == 1) {
                     if (fromJson.getData() != null) {
                         LinkedTreeMap treeMap = (LinkedTreeMap) (fromJson.getData());
                         ManagedUser managedUser = new ManagedUser(
@@ -63,7 +52,7 @@ public class MngDataSource {
                     } else {
                         myViewModel.setmCreateResult(new Result.Error("Fail to create user.", R.string.result_fail_create_user));
                     }
-                } else if (operationCode == 2) { // modify user
+                } else if (operationCode == 2) {
                     if (fromJson.getData() != null) {
                         LinkedTreeMap treeMap = (LinkedTreeMap) (fromJson.getData());
                         ManagedUser managedUser = new ManagedUser(
@@ -75,7 +64,7 @@ public class MngDataSource {
                     } else {
                         myViewModel.setmModifyResult(new Result.Error("Fail to modify user.", R.string.result_fail_modify_user));
                     }
-                } else if (operationCode == 3) { // delete user
+                } else if (operationCode == 3) {
                     if (fromJson.getData() != null) {
                         LinkedTreeMap treeMap = (LinkedTreeMap) (fromJson.getData());
                         ManagedUser managedUser = new ManagedUser(treeMap.get("username").toString(), null, null);
@@ -83,7 +72,7 @@ public class MngDataSource {
                     } else {
                         myViewModel.setmDeleteResult(new Result.Error("Fail to delete user.", R.string.result_fail_delete_user));
                     }
-                } else {                         // change password
+                } else {
                     if (fromJson.getData() != null) {
                         LinkedTreeMap treeMap = (LinkedTreeMap) (fromJson.getData());
                         ManagedUser managedUser = new ManagedUser(
@@ -138,7 +127,6 @@ public class MngDataSource {
             if (fromJson.getData() == null) {
                 return users;
             }
-            // 列表的话是List<LinkedTreeMap>类型
             List<LinkedTreeMap> data = (ArrayList<LinkedTreeMap>) fromJson.getData();
             for (int i = 0; i < data.size(); i++) {
                 LinkedTreeMap treeMap = data.get(i);

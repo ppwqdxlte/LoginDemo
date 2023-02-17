@@ -39,7 +39,6 @@ public class MyViewModel extends ViewModel {
     }
 
     public void setmResultString(Result<String> result) {
-        // 如果setValue则报错 IllegalStateException: Cannot invoke setValue on a background thread
         this.mResultString.postValue(result);
     }
 

@@ -88,12 +88,10 @@ public class TokenRepository {
     public void queryKctsByMeterStr(String meterStr) {
         this.meterStr = meterStr;
         dataSource.queryTokenByTypeAndMeterStr(TokenType.KCT, meterStr);
-//        Result<List<KCT>>
     }
 
     public void queryTccsByMeterStr(String meterStr) {
         this.meterStr = meterStr;
         dataSource.queryTokenByTypeAndMeterStr(TokenType.TCC, meterStr);
-//        Result<List<TCC>>
     }
 }

@@ -7,11 +7,6 @@ import androidx.annotation.NonNull;
 import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 
-/**
- * ViewModel provider factory to instantiate LoginViewModel.
- * Required given LoginViewModel has a non-empty constructor
- * 这个玩意儿应该有类似于Spring容器托管，只不过是Android的容器，来调用create()方法创建 LoginViewModel对象
- */
 public class LoginViewModelFactory implements ViewModelProvider.Factory {
 
     @NonNull
