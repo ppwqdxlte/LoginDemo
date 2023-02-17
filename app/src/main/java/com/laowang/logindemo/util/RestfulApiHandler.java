@@ -100,6 +100,7 @@ public class RestfulApiHandler {
     }
 
     public void postAsync(MyViewModel myViewModel, String url, Map<String, String> params) {
+//        final Result<String>[] result = new Result[]{null};
         FormBody.Builder builder = new FormBody.Builder();
         for (String s : params.keySet()) {
             builder.add(s, params.get(s));
@@ -111,7 +112,7 @@ public class RestfulApiHandler {
         okHttpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                myViewModel.setmResultString(new Result.Success<>(e));
+                myViewModel.setmResultString(new Result.Error(e));
             }
 
             @Override

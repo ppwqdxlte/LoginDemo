@@ -19,31 +19,39 @@ import java.util.Map;
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 public class LoginDataSource {
-
+    /**
+     * REST接口通用访问工具
+     */
     private RestfulApiHandler apiHandler = new RestfulApiHandler();
     /**
-     * 登录
+     * 登录方法的源头
      *
      * @param username username
      * @param password password
-     * @return 携带登录用户结果
+     * @return Result对象 /data/.. 携带登录用户结果
      */
     public Result<LoggedInUser> login(String username, String password) {
         try {
+            // : handle loggedInUser authentication
             String strUrl = ApiUrl.API_BASE + ApiUrl.API_LOGIN;
             Map<String, String> params = new HashMap<>();
             params.put("username", username);
             params.put("password", password);
             Result<String>[] result = apiHandler.postSync(null, strUrl, params);
+            // 直到result[0]不为空退出循环执行后面方法
             while (result[0] == null) {
             }
             if (result[0] instanceof Result.Success) {
                 Result.Success<String> success = (Result.Success<String>) result[0];
                 String jsonStr = success.getData();
+                // eg.用户或密码错误时候，{"data":null,"msg":null,"code":null,"throwable":null}
+//                Log.e("body to string", jsonStr);
                 com.laowang.logindemo.apientity.Result fromJson = new Gson().fromJson(jsonStr, com.laowang.logindemo.apientity.Result.class);
+                // 需注意 空指针异常
                 if (fromJson.getData() == null) {
                     return new Result.Error("Error username or password~", new Exception("No such an account exists!"));
                 }
+//                Log.i("Gson's Data toString", fromJson.getData().toString());
                 LinkedTreeMap data = (LinkedTreeMap) fromJson.getData();
                 return new Result.Success<>(new LoggedInUser(
                         java.util.UUID.randomUUID().toString(),
@@ -63,7 +71,11 @@ public class LoginDataSource {
         }
     }
 
+    /**
+     * 登出，调用此法的上游方法已经移除登录user，这里只要从 主页MainActivity 跳转到Login页面即可
+     */
     public void logout(Activity from, Class<LoginActivity> dest) {
+        // 跳转到LoginActivity登录页面 (1)关闭当前 MainActivity (2)打开LoginActivity
         from.finish();
         Intent loginIntent = new Intent(from, dest);
         from.startActivity(loginIntent);

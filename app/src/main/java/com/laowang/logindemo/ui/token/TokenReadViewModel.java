@@ -105,6 +105,7 @@ public class TokenReadViewModel extends ViewModel {
     public void queryTokens(@NonNull Context context, @NonNull TokenType type, @NonNull String meterStr) {
         this.context = context;
         if (meterStr.trim().equals("")) {
+            // 权限控制,普通用户不允许 表号为空，管理员表号空时候查询所有该类型的tokens
             if (loginRepository.getUser().getLevel().contains("0")) {
                 mTokenResult.setValue(new TokenResult(null, R.string.result_fail_blank_meter_str));
             }
@@ -114,8 +115,10 @@ public class TokenReadViewModel extends ViewModel {
         treeMap.put(0, addTableHeadInfoInRow(context));
         if (type == TokenType.KCT) {
             tokenRepository.queryKctsByMeterStr(meterStr);
+            // mKctResult.observe需要添加以下逻辑
         } else {
             tokenRepository.queryTccsByMeterStr(meterStr);
+            // mTccResult.observe需要添加以下逻辑
         }
     }
 
@@ -148,4 +151,5 @@ public class TokenReadViewModel extends ViewModel {
         tokenRow.addView(tokenStr);
         return tokenRow;
     }
+
 }

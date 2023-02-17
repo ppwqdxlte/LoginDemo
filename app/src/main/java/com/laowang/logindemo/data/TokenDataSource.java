@@ -20,7 +20,7 @@ public class TokenDataSource<T> {
 
     private RestfulApiHandler apiHandler = new RestfulApiHandler();
 
-    private MyViewModel myViewModel = new MyViewModel();
+    private MyViewModel myViewModel;
 
     public MyViewModel getMyViewModel() {
         return myViewModel;

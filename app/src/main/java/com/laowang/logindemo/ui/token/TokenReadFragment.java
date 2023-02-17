@@ -35,6 +35,7 @@ public class TokenReadFragment extends Fragment {
 
         final TextView textView = binding.textTokenRead;
         tokenReadViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        /* 监听 QUERY 点击查询 */
         binding.btnQuery.setOnClickListener(v -> {
             String tokenStr = binding.editMeterString.getText().toString();
             if (binding.rbKct.isChecked()) {
@@ -45,6 +46,7 @@ public class TokenReadFragment extends Fragment {
                 tokenReadViewModel.setmTokenResult(new TokenResult(null, R.string.result_fail_blank_type));
             }
         });
+        /* 观察 tokenResult 的变化，Toast弹窗显示结果 */
         tokenReadViewModel.getmTokenResult().observe(getViewLifecycleOwner(), tokenResult -> {
             if (tokenResult == null) return;
             if (tokenResult.getErrorCode() != null){
@@ -54,6 +56,7 @@ public class TokenReadFragment extends Fragment {
                 showTokenResult(tokenResult.getSuccessCode());
             }
         });
+        /* 观察 tableRows 的变化，更新UI界面的列表 */
         final TableLayout tokenTable = binding.tbTokenList;
         tokenReadViewModel.getmTableRows().observe(getViewLifecycleOwner(), integerTableRowMap -> {
             int childCount = tokenTable.getChildCount();
