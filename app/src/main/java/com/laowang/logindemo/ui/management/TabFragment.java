@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,12 @@ import com.laowang.logindemo.data.LoginDataSource;
 import com.laowang.logindemo.data.LoginRepository;
 import com.laowang.logindemo.data.model.ManagedUser;
 import com.laowang.logindemo.databinding.FragmentManagementViewpagerBinding;
+import com.laowang.logindemo.ui.MyViewModel;
+
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,6 +49,10 @@ public class TabFragment extends Fragment {
      * 因为调用太多次，所以干脆作为成员变量
      */
     private MngViewModel mngViewModel;
+    /**
+     * 通用的View Model，ViewModelProvider(不同生命周期拥有者)决定属于哪个页面
+     */
+    private MyViewModel myViewModel;
 
     /**
      * 获得选项卡片的实例并确定 页面索引index
@@ -68,6 +79,7 @@ public class TabFragment extends Fragment {
         mngViewModel = new ViewModelProvider(getParentFragment()).get(MngViewModel.class);
         /* 初始化 pageViewModel视图模型对象 */
         pageViewModel = new ViewModelProvider(getParentFragment()).get(PageViewModel.class);
+        myViewModel = new ViewModelProvider(getParentFragment()).get(MyViewModel.class);
         int index = 1;
         if (getArguments() != null) {
             index = getArguments().getInt(ARG_SECTION_NUMBER);
@@ -192,6 +204,28 @@ public class TabFragment extends Fragment {
             if (userMngResult.getSuccessCode() != null) {
                 int successCode = userMngResult.getSuccessCode();
                 Toast.makeText(getActivity(), successCode, Toast.LENGTH_SHORT).show();
+                // 刷新 user list
+                Map<String, TableRow> oldMap = mngViewModel.getTableRows().getValue();
+                Map<TableRow, String> reverseMap = new TreeMap<>((o1, o2) -> {
+                    TextView SN1 = (TextView) (o1.getChildAt(0));
+                    TextView SN2 = (TextView) (o2.getChildAt(0));
+                    int i = Integer.parseInt(SN1.getText().toString()) - Integer.parseInt(SN2.getText().toString());
+                    if (i < 0) {
+                        return 1;
+                    } else if (i > 0) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                });
+                Map<String, TableRow> newCopy = new HashMap<>();
+                for (String s : oldMap.keySet()) {
+                    reverseMap.put(oldMap.get(s), s);
+                }
+                for (TableRow tableRow : reverseMap.keySet()) {
+                    newCopy.put(reverseMap.get(tableRow), tableRow);
+                }
+                mngViewModel.setmTableRows(newCopy);
             }
             // 清除结果状态，否则Toast每次刷新fragment都会显示一遍。
             pageViewModel.setmUserMngResult(null);
@@ -265,14 +299,14 @@ public class TabFragment extends Fragment {
             String selectedName = binding.sectionUsernameSelected.getText().toString();
             String oldPwd = binding.sectionPasswordOld.getText().toString();
             if (binding.sectionPermissionRole.getVisibility() == View.VISIBLE) {            // create user
-                pageViewModel.createUser(mngViewModel, newUsername, newPwd, repeatPwd, regular.isChecked() ? 0 : 1);
+                pageViewModel.createUser(mngViewModel, getContext(), newUsername, newPwd, repeatPwd, regular.isChecked() ? 0 : 1);
             } else if (binding.sectionPasswordOld.getVisibility() == View.VISIBLE
                     && binding.sectionUsernameSelected.getVisibility() == View.VISIBLE) {   // modify user
                 // 修改用户
-                pageViewModel.modifyUser(mngViewModel, selectedName, oldPwd, newPwd, repeatPwd);
+                pageViewModel.modifyUser(mngViewModel, getContext(), selectedName, oldPwd, newPwd, repeatPwd);
             } else {                                                                        // change password
                 // 修改密码
-                pageViewModel.changePassword(mngViewModel, newPwd, repeatPwd);
+                pageViewModel.changePassword(mngViewModel, getContext(), newPwd, repeatPwd);
             }
         });
     }
@@ -282,7 +316,7 @@ public class TabFragment extends Fragment {
      */
     private void listenDeleteClicked() {
         // 删除监听器
-        binding.sectionBtnDelete.setOnClickListener(v -> pageViewModel.deleteUser(mngViewModel, binding.sectionUsernameSelected.getText().toString()));
+        binding.sectionBtnDelete.setOnClickListener(v -> pageViewModel.deleteUser(mngViewModel, getContext(), binding.sectionUsernameSelected.getText().toString()));
     }
 
     /**

@@ -30,6 +30,7 @@ public class MngFragment extends Fragment {
         // 初始化 ResourceProvider 的上下文，注意，必须要在ManagementViewModel构造方法之前执行
         ResourceProvider.setmCtx(getContext());
         // 初始化 ManagementViewModel对象
+        MngViewModel.fragment = this;
         viewModel = new ViewModelProvider(this).get(MngViewModel.class);
         /* 充气 */
         binding = FragmentManagementBinding.inflate(inflater, container, false);
