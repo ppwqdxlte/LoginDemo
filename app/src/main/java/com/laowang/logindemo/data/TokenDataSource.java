@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.gson.Gson;
@@ -26,6 +27,8 @@ public class TokenDataSource<T> {
     private RestfulApiHandler apiHandler = new RestfulApiHandler();
 
     private MyViewModel myViewModel = new MyViewModel();
+
+    private MyViewModel myViewModel;
 
     public MyViewModel getMyViewModel() {
         return myViewModel;
